@@ -40,6 +40,7 @@ hs_err_pid*
 *.bat
 *.class
 *.cmd
+*.cmd
 *.com
 *.cpl
 *.dll
