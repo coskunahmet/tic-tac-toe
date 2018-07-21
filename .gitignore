@@ -21,3 +21,59 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+
+# Binaries
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.war
+*.ear
+*.sar
+*.class
+*.asp
+*.bat
+*.class
+*.cmd
+*.com
+*.cpl
+*.dll
+*.exe
+*.fon
+*.hta
+*.ini
+*.ins
+*.iw
+*.jar
+*.jsp
+*.js
+*.jse
+*.pif
+*.scr
+*.shs
+*.sh
+*.vb
+*.vbe
+*.vbs
+*.ws
+*.wsc
+*.wsf
+*.wsh
+*.msi
+
+# Maven
+target/
+
+# IntelliJ project files
+*.iml
+*.iws
+*.ipr
+.idea/
+
+# Forbiden files
+
