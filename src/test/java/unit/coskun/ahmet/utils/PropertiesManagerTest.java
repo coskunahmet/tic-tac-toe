@@ -3,13 +3,14 @@ package unit.coskun.ahmet.utils;
 import coskun.ahmet.utils.PropertiesManager;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 public class PropertiesManagerTest {
 
     @Test
     public void testPropertiesFileGivenAllInputsWhenHasValueThenGameCanStart() {
-        PropertiesManager propertiesManager = PropertiesManager.getInstance();
+        PropertiesManager propertiesManager = null;
+        propertiesManager = PropertiesManager.getInstance();
 
         String sizeOfPlaygroundPropertyName = "size.of.playground";
         String val = propertiesManager.getProperty(sizeOfPlaygroundPropertyName);
@@ -30,5 +31,13 @@ public class PropertiesManagerTest {
         val = propertiesManager.getProperty(computerPlayerCharacterPropertyName);
         assertNotEquals(computerPlayerCharacterPropertyName + " value should be different than null", val, null);
         assertNotEquals(computerPlayerCharacterPropertyName + " value should be different than empty", val, "");
+    }
+
+    @Test
+    public void testPropertiesFileGivenTwoPlayerInputWhenSameCharThenGameCanNotStart() {
+        PropertiesManager propertiesManager = null;
+        propertiesManager = PropertiesManager.getInstance();
+
+        assertTrue(propertiesManager.isPropertiesValid());
     }
 }

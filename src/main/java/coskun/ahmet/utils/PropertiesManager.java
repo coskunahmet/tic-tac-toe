@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class PropertiesManager {
@@ -13,6 +15,8 @@ public class PropertiesManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(PropertiesManager.class);
 
     private final static String GAME_CONFIG_FILE = "config" + File.separator + "config.properties";
+
+    public final static String SIZE_OF_PLAYGROUND = "size.of.playground";
 
     private Properties gameProperties;
 
@@ -51,7 +55,38 @@ public class PropertiesManager {
                 }
             }
         }
+    }
 
+    //To check if there is the same char for different player or computer
+    public boolean isPropertiesValid() throws NumberFormatException {
+
+        if (!isThereSameCharForDifferentPlayer())
+            return false;
+
+        return isSizeOfPlayGroundValid();
+    }
+
+    private boolean isThereSameCharForDifferentPlayer() {
+        Map<String, String> propertiesMap = new HashMap<String, String>();
+        for (Object k : this.gameProperties.keySet()) {
+            String key = (String) k;
+            if (propertiesMap.get(this.gameProperties.getProperty(key)) != null) {
+                return false;
+            }
+
+            propertiesMap.put(this.gameProperties.getProperty(key), this.gameProperties.getProperty(key));
+        }
+
+        return true;
+    }
+
+    //size of playground should be between 3x3 and 10x10
+    private boolean isSizeOfPlayGroundValid() throws NumberFormatException {
+        String sizeOfPlaygroundStr = this.gameProperties.getProperty(SIZE_OF_PLAYGROUND);
+
+        int sizeOfPlaygroundInt = Integer.parseInt(sizeOfPlaygroundStr);
+
+        return sizeOfPlaygroundInt >= 3 && sizeOfPlaygroundInt <= 10;
     }
 
     public String getProperty(String key) {
@@ -63,5 +98,4 @@ public class PropertiesManager {
         return val;
 
     }
-
 }
