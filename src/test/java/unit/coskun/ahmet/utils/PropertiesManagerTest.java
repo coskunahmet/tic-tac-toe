@@ -13,22 +13,22 @@ public class PropertiesManagerTest {
         propertiesManager = PropertiesManager.getInstance();
 
         String sizeOfPlaygroundPropertyName = "size.of.playground";
-        String val = propertiesManager.getProperty(sizeOfPlaygroundPropertyName);
+        String val = propertiesManager.getGameProperty(sizeOfPlaygroundPropertyName);
         assertNotEquals(sizeOfPlaygroundPropertyName + " value should be different than null", val, null);
         assertNotEquals(sizeOfPlaygroundPropertyName + " value should be different than empty", val, "");
 
         String firstPlayerCharacterPropertyName = "first.player.character";
-        val = propertiesManager.getProperty(firstPlayerCharacterPropertyName);
+        val = propertiesManager.getGameProperty(firstPlayerCharacterPropertyName);
         assertNotEquals(firstPlayerCharacterPropertyName + " value should be different than null", val, null);
         assertNotEquals(firstPlayerCharacterPropertyName + " value should be different than empty", val, "");
 
         String secondPlayerCharacterPropertyName = "second.player.character";
-        val = propertiesManager.getProperty(secondPlayerCharacterPropertyName);
+        val = propertiesManager.getGameProperty(secondPlayerCharacterPropertyName);
         assertNotEquals(secondPlayerCharacterPropertyName + " value should be different than null", val, null);
         assertNotEquals(secondPlayerCharacterPropertyName + " value should be different than empty", val, "");
 
         String computerPlayerCharacterPropertyName = "computer.player.character";
-        val = propertiesManager.getProperty(computerPlayerCharacterPropertyName);
+        val = propertiesManager.getGameProperty(computerPlayerCharacterPropertyName);
         assertNotEquals(computerPlayerCharacterPropertyName + " value should be different than null", val, null);
         assertNotEquals(computerPlayerCharacterPropertyName + " value should be different than empty", val, "");
     }

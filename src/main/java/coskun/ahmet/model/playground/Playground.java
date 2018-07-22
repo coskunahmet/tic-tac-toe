@@ -5,7 +5,7 @@ import coskun.ahmet.utils.PropertiesManager;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Playground {
+public class Playground implements IPlayground {
 
     private Map<Integer, PlaygroundTile> playgroundTileList;
     private int sizeOfPlayGroundInt;
@@ -13,7 +13,7 @@ public class Playground {
     private static Playground instance = null;
 
     private Playground() {
-        String sizeOfPlaygroundStr = PropertiesManager.getInstance().getProperty(PropertiesManager.SIZE_OF_PLAYGROUND);
+        String sizeOfPlaygroundStr = PropertiesManager.getInstance().getGameProperty(PropertiesManager.SIZE_OF_PLAYGROUND);
         sizeOfPlayGroundInt = Integer.parseInt(sizeOfPlaygroundStr);
         initPlayGround(sizeOfPlayGroundInt);
     }
@@ -56,6 +56,58 @@ public class Playground {
             }
         }
 
+    }
+
+    public void updatePlayground(int position, char newChar) {
+
+        PlaygroundTile newPlaygroundTile = new PlaygroundTile();
+        newPlaygroundTile.setPosition(position);
+        newPlaygroundTile.setCurrentCharOnTile(newChar);
+
+        PlaygroundTile oldPlaygroundTile = playgroundTileList.get(newPlaygroundTile.getPosition());
+
+        PlaygroundTile rightTile = oldPlaygroundTile.getRightTile();
+        newPlaygroundTile.setRightTile(rightTile);
+        if(rightTile != null)
+            rightTile.setLeftTile(newPlaygroundTile);
+
+        PlaygroundTile leftTile = oldPlaygroundTile.getLeftTile();
+        newPlaygroundTile.setLeftTile(leftTile);
+        if(leftTile != null)
+            leftTile.setRightTile(newPlaygroundTile);
+
+        PlaygroundTile upperTile = oldPlaygroundTile.getUpperTile();
+        newPlaygroundTile.setUpperTile(upperTile);
+        if(upperTile != null)
+            upperTile.setLowerTile(newPlaygroundTile);
+
+        PlaygroundTile lowerTile = oldPlaygroundTile.getLowerTile();
+        newPlaygroundTile.setLowerTile(lowerTile);
+        if(lowerTile != null)
+            lowerTile.setUpperTile(newPlaygroundTile);
+
+        PlaygroundTile rightUpperTile = oldPlaygroundTile.getRightUpperTile();
+        newPlaygroundTile.setRightUpperTile(rightUpperTile);
+        if(rightUpperTile != null)
+            rightUpperTile.setLeftLowerTile(newPlaygroundTile);
+
+        PlaygroundTile rightLowerTile = oldPlaygroundTile.getRightLowerTile();
+        newPlaygroundTile.setRightLowerTile(rightLowerTile);
+        if(rightLowerTile != null)
+            rightLowerTile.setLeftUpperTile(newPlaygroundTile);
+
+        PlaygroundTile leftUpperTile = oldPlaygroundTile.getLeftUpperTile();
+        newPlaygroundTile.setLeftUpperTile(leftUpperTile);
+        if(leftUpperTile != null)
+            leftUpperTile.setRightLowerTile(newPlaygroundTile);
+
+        PlaygroundTile leftLowerTile = oldPlaygroundTile.getLeftLowerTile();
+        newPlaygroundTile.setLeftLowerTile(leftLowerTile);
+        if(leftLowerTile != null)
+            leftLowerTile.setRightUpperTile(newPlaygroundTile);
+
+        playgroundTileList.remove(newPlaygroundTile.getPosition());
+        playgroundTileList.put(newPlaygroundTile.getPosition(), newPlaygroundTile);
     }
 
     public String getPlayGroundStr() {
