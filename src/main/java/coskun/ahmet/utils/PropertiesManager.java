@@ -1,6 +1,5 @@
 package coskun.ahmet.utils;
 
-import coskun.ahmet.exception.PropertiesNotValidException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,9 +58,9 @@ public class PropertiesManager {
     }
 
     //To check if there is the same char for different player or computer
-    public boolean isPropertiesValid() throws NumberFormatException{
+    public boolean isPropertiesValid() throws NumberFormatException {
 
-        if(!isThereSameCharForDifferentPlayer())
+        if (!isThereSameCharForDifferentPlayer())
             return false;
 
         return isSizeOfPlayGroundValid();
@@ -69,9 +68,9 @@ public class PropertiesManager {
 
     private boolean isThereSameCharForDifferentPlayer() {
         Map<String, String> propertiesMap = new HashMap<String, String>();
-        for(Object k: this.gameProperties.keySet()) {
-            String key = (String)k;
-            if(propertiesMap.get(this.gameProperties.getProperty(key)) != null) {
+        for (Object k : this.gameProperties.keySet()) {
+            String key = (String) k;
+            if (propertiesMap.get(this.gameProperties.getProperty(key)) != null) {
                 return false;
             }
 
@@ -82,7 +81,7 @@ public class PropertiesManager {
     }
 
     //size of playground should be between 3x3 and 10x10
-    private boolean isSizeOfPlayGroundValid() throws NumberFormatException{
+    private boolean isSizeOfPlayGroundValid() throws NumberFormatException {
         String sizeOfPlaygroundStr = this.gameProperties.getProperty(SIZE_OF_PLAYGROUND);
 
         int sizeOfPlaygroundInt = Integer.parseInt(sizeOfPlaygroundStr);
