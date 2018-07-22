@@ -17,7 +17,7 @@ public class PropertiesManager {
 
     private final static String GAME_CONFIG_FILE = "config" + File.separator + "config.properties";
 
-    private final static String SIZE_OF_PLAYGROUND = "size.of.playground";
+    public final static String SIZE_OF_PLAYGROUND = "size.of.playground";
 
     private Properties gameProperties;
 
@@ -86,11 +86,11 @@ public class PropertiesManager {
 
     //size of playground should be between 3x3 and 10x10
     public boolean isSizeOfPlayGroundValid() throws NumberFormatException{
-        String sizeOfPlayground = this.gameProperties.getProperty(SIZE_OF_PLAYGROUND);
+        String sizeOfPlaygroundStr = this.gameProperties.getProperty(SIZE_OF_PLAYGROUND);
 
-        int sizeOfPlayGround = Integer.parseInt(sizeOfPlayground);
+        int sizeOfPlaygroundInt = Integer.parseInt(sizeOfPlaygroundStr);
 
-        if(sizeOfPlayGround < 3  || sizeOfPlayGround > 10) {
+        if(sizeOfPlaygroundInt < 3  || sizeOfPlaygroundInt > 10) {
             return false;
         }
 
