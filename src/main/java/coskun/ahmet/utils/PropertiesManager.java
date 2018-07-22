@@ -64,13 +64,10 @@ public class PropertiesManager {
         if(!isThereSameCharForDifferentPlayer())
             return false;
 
-        if(!isSizeOfPlayGroundValid())
-            return false;
-
-        return true;
+        return isSizeOfPlayGroundValid();
     }
 
-    public boolean isThereSameCharForDifferentPlayer() {
+    private boolean isThereSameCharForDifferentPlayer() {
         Map<String, String> propertiesMap = new HashMap<String, String>();
         for(Object k: this.gameProperties.keySet()) {
             String key = (String)k;
@@ -85,16 +82,12 @@ public class PropertiesManager {
     }
 
     //size of playground should be between 3x3 and 10x10
-    public boolean isSizeOfPlayGroundValid() throws NumberFormatException{
+    private boolean isSizeOfPlayGroundValid() throws NumberFormatException{
         String sizeOfPlaygroundStr = this.gameProperties.getProperty(SIZE_OF_PLAYGROUND);
 
         int sizeOfPlaygroundInt = Integer.parseInt(sizeOfPlaygroundStr);
 
-        if(sizeOfPlaygroundInt < 3  || sizeOfPlaygroundInt > 10) {
-            return false;
-        }
-
-        return true;
+        return sizeOfPlaygroundInt >= 3 && sizeOfPlaygroundInt <= 10;
     }
 
     public String getProperty(String key) {
@@ -106,5 +99,4 @@ public class PropertiesManager {
         return val;
 
     }
-
 }
