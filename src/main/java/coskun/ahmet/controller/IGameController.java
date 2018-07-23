@@ -8,4 +8,8 @@ public interface IGameController {
     void attach(Observer observer, String topic);
 
     void notifyAllObservers(String topic, GameBoardTile gameBoardTile);
+
+    void update();
+    void start();
+    void init();
 }
