@@ -1,6 +1,9 @@
 package coskun.ahmet.runner;
 
+import coskun.ahmet.controller.GameController;
+import coskun.ahmet.model.gameboard.GameBoardObserver;
 import coskun.ahmet.utils.PropertiesManager;
+import coskun.ahmet.view.GameViewObserver;
 
 public class GameRunner {
 
@@ -11,7 +14,7 @@ public class GameRunner {
             //TODO put a message on console
             return;
         }
-/*
+
         GameController gameController = new GameController();
         GameViewObserver gameViewObserver = new GameViewObserver();
         GameBoardObserver gameBoardObserver = new GameBoardObserver();
@@ -19,12 +22,8 @@ public class GameRunner {
         gameController.attach(gameViewObserver, PropertiesManager.getInstance().getTopicProperty(PropertiesManager.VIEW_TOPIC_NAME_KEY));
         gameController.attach(gameBoardObserver, PropertiesManager.getInstance().getTopicProperty(PropertiesManager.MODEL_TOPIC_NAME_KEY));
 
-        GameBoardTile gameBoardTile = new GameBoardTile();
-        gameBoardTile.setPosition(5);
-        gameBoardTile.setCurrentCharOnTile('X');
-        gameController.setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.VIEW_TOPIC_NAME_KEY), gameBoardTile);
-
-        gameViewObserver.getGameView().showGameBoard();*/
+        gameController.init();
+        gameController.start();
 
 
     }

@@ -95,6 +95,10 @@ public class GameBoardTile {
         this.position = position;
     }
 
+    public void setPosition(int positionX, int positionY, int sizeOfGameBoard) {
+        this.position = (positionX  - 1) * sizeOfGameBoard + (positionY - 1);
+    }
+
     public String getPositionOnMatrix(int sizeOfGameBoard) {
         return getPosition() / sizeOfGameBoard + "*" + getPosition() % sizeOfGameBoard;
     }
