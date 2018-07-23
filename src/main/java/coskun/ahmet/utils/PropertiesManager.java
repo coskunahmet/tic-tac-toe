@@ -17,7 +17,7 @@ public class PropertiesManager {
     private final static String GAME_CONFIG_FILE = "config" + File.separator + "config.properties";
     private final static String TOPIC_CONFIG_FILE = "topic" + File.separator + "topic.properties";
 
-    public final static String SIZE_OF_PLAYGROUND = "size.of.playground";
+    public final static String SIZE_OF_GAME_BOARD = "size.of.game.board";
     public final static String MODEL_TOPIC_NAME_KEY = "model.topic.name";
     public final static String VIEW_TOPIC_NAME_KEY = "view.topic.name";
 
@@ -76,7 +76,7 @@ public class PropertiesManager {
         if (!isThereSameCharForDifferentPlayer())
             return false;
 
-        return isSizeOfPlayGroundValid();
+        return isSizeOfGameBoardValid();
     }
 
     private boolean isThereSameCharForDifferentPlayer() {
@@ -93,13 +93,13 @@ public class PropertiesManager {
         return true;
     }
 
-    //size of playground should be between 3x3 and 10x10
-    private boolean isSizeOfPlayGroundValid() throws NumberFormatException {
-        String sizeOfPlaygroundStr = this.gameProperties.getProperty(SIZE_OF_PLAYGROUND);
+    //size of gameboard should be between 3x3 and 10x10
+    private boolean isSizeOfGameBoardValid() throws NumberFormatException {
+        String sizeOfGameBoardStr = this.gameProperties.getProperty(SIZE_OF_GAME_BOARD);
 
-        int sizeOfPlaygroundInt = Integer.parseInt(sizeOfPlaygroundStr);
+        int sizeOfGameBoardInt = Integer.parseInt(sizeOfGameBoardStr);
 
-        return sizeOfPlaygroundInt >= 3 && sizeOfPlaygroundInt <= 10;
+        return sizeOfGameBoardInt >= 3 && sizeOfGameBoardInt <= 10;
     }
 
     public String getGameProperty(String key) {

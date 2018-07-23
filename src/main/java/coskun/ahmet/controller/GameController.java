@@ -1,6 +1,6 @@
 package coskun.ahmet.controller;
 
-import coskun.ahmet.model.playground.PlaygroundTile;
+import coskun.ahmet.model.gameboard.GameBoardTile;
 import coskun.ahmet.Observer;
 import coskun.ahmet.utils.PropertiesManager;
 
@@ -13,7 +13,7 @@ public class GameController {
 
     private Map<String, List<Observer>> observers = new HashMap<String, List<Observer>>();
 
-    private PlaygroundTile playgroundTile;
+    private GameBoardTile gameBoardTile;
 
     public GameController() {
         observers.put(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.MODEL_TOPIC_NAME_KEY), new ArrayList<Observer>());
@@ -21,12 +21,12 @@ public class GameController {
 
     }
 
-    public PlaygroundTile getPlaygroundTile() {
-        return playgroundTile;
+    public GameBoardTile getGameBoardTile() {
+        return gameBoardTile;
     }
 
-    public void setPlaygroundTile(String topic, PlaygroundTile playgroundTile) {
-        this.playgroundTile = playgroundTile;
+    public void setGameBoardTile(String topic, GameBoardTile gameBoardTile) {
+        this.gameBoardTile = gameBoardTile;
         notifyAllObservers(topic);
     }
 
@@ -36,7 +36,7 @@ public class GameController {
 
     public void notifyAllObservers(String topic){
         for (Observer observer : observers.get(topic)) {
-            observer.update(this.playgroundTile.getPosition(), this.playgroundTile.getCurrentCharOnTile());
+            observer.update(this.gameBoardTile.getPosition(), this.gameBoardTile.getCurrentCharOnTile());
         }
     }
 }
