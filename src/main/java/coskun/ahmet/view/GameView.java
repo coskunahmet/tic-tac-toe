@@ -8,8 +8,7 @@ public class GameView implements IGameView {
     private int sizeOfGameBoardInt;
 
     public GameView() {
-        String sizeOfGameBoardStr = PropertiesManager.getInstance().getGameProperty(PropertiesManager.SIZE_OF_GAME_BOARD);
-        sizeOfGameBoardInt = Integer.parseInt(sizeOfGameBoardStr);
+        sizeOfGameBoardInt = PropertiesManager.getInstance().getGameBoardSize();
 
         gameBoard = new char[sizeOfGameBoardInt][sizeOfGameBoardInt];
 

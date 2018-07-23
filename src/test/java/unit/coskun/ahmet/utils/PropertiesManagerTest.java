@@ -3,14 +3,14 @@ package unit.coskun.ahmet.utils;
 import coskun.ahmet.utils.PropertiesManager;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PropertiesManagerTest {
 
     @Test
     public void testPropertiesFileGivenAllInputsWhenHasValueThenGameCanStart() {
-        PropertiesManager propertiesManager = null;
-        propertiesManager = PropertiesManager.getInstance();
+        PropertiesManager propertiesManager = PropertiesManager.getInstance();
 
         String sizeOfGameBoardPropertyName = "size.of.game.board";
         String val = propertiesManager.getGameProperty(sizeOfGameBoardPropertyName);
@@ -35,8 +35,7 @@ public class PropertiesManagerTest {
 
     @Test
     public void testPropertiesFileGivenTwoPlayerInputWhenSameCharThenGameCanNotStart() {
-        PropertiesManager propertiesManager = null;
-        propertiesManager = PropertiesManager.getInstance();
+        PropertiesManager propertiesManager = PropertiesManager.getInstance();
 
         assertTrue(propertiesManager.isPropertiesValid());
     }

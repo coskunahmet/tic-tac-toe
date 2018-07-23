@@ -7,12 +7,12 @@ public class GameRunner {
     public static void main(String[] args) {
         PropertiesManager propertiesManagerInstance = PropertiesManager.getInstance();
 
-        if(!propertiesManagerInstance.isPropertiesValid()) {
+        if (!propertiesManagerInstance.isPropertiesValid()) {
             //TODO put a message on console
             return;
         }
-
-        /*GameController gameController = new GameController();
+/*
+        GameController gameController = new GameController();
         GameViewObserver gameViewObserver = new GameViewObserver();
         GameBoardObserver gameBoardObserver = new GameBoardObserver();
 
