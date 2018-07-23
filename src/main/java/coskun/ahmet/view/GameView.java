@@ -27,6 +27,7 @@ public class GameView implements IGameView {
                 System.out.print(gameBoard[i][j]);
             }
         }
+        System.out.println();
     }
 
     public void updateGameBoard(int position, char newChar) {
