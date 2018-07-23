@@ -10,6 +10,8 @@ public interface IGameController {
     void notifyAllObservers(String topic, GameBoardTile gameBoardTile);
 
     void update();
+
     void start();
+
     void init();
 }

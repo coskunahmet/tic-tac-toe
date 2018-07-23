@@ -4,7 +4,7 @@ import coskun.ahmet.utils.PropertiesManager;
 
 import java.util.Random;
 
-public class ComputerPlayer extends Player{
+public class ComputerPlayer extends Player {
 
     public ComputerPlayer(String name, char symbol) {
         super(name, symbol);
@@ -16,7 +16,7 @@ public class ComputerPlayer extends Player{
         this.setyPositionToPlay(generatePositionToPlay());
     }
 
-    public int generatePositionToPlay() {
+    private int generatePositionToPlay() {
         Random generator = new Random();
         return generator.nextInt(PropertiesManager.getInstance().getGameBoardSize()) + 1;
     }

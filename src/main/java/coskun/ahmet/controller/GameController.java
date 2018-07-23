@@ -1,7 +1,7 @@
 package coskun.ahmet.controller;
 
-import coskun.ahmet.model.gameboard.GameBoardTile;
 import coskun.ahmet.Observer;
+import coskun.ahmet.model.gameboard.GameBoardTile;
 import coskun.ahmet.model.player.ComputerPlayer;
 import coskun.ahmet.model.player.HumanPlayer;
 import coskun.ahmet.model.player.Player;
@@ -9,7 +9,7 @@ import coskun.ahmet.utils.PropertiesManager;
 
 import java.util.*;
 
-public class GameController implements IGameController{
+public class GameController implements IGameController {
 
     private Map<String, List<Observer>> observers = new HashMap<String, List<Observer>>();
     private IInputController inputController = new InputController();
@@ -31,15 +31,15 @@ public class GameController implements IGameController{
     }
 
 
-    public void setGameBoardTile(String topic, GameBoardTile gameBoardTile) {
+    private void setGameBoardTile(String topic, GameBoardTile gameBoardTile) {
         notifyAllObservers(topic, gameBoardTile);
     }
 
-    public void attach(Observer observer, String topic){
+    public void attach(Observer observer, String topic) {
         observers.get(topic).add(observer);
     }
 
-    public void notifyAllObservers(String topic, GameBoardTile gameBoardTile){
+    public void notifyAllObservers(String topic, GameBoardTile gameBoardTile) {
         for (Observer observer : observers.get(topic)) {
             observer.update(gameBoardTile.getPosition(), gameBoardTile.getCurrentCharOnTile());
         }
@@ -61,7 +61,7 @@ public class GameController implements IGameController{
 
         updatePlayerTurn();
 
-        while(isGamePlay) {
+        while (isGamePlay) {
             beforePlay();
             update();
             afterPlay();
@@ -73,7 +73,7 @@ public class GameController implements IGameController{
     public void update() {
 
 
-        if(currentPlayer instanceof HumanPlayer) {
+        if (currentPlayer instanceof HumanPlayer) {
             String input = inputController.getInput();
             String[] coordinates = input.split(GameController.COORDINATE_DELIMITER);
             int coordinateX = Integer.parseInt(coordinates[0]);
@@ -87,27 +87,27 @@ public class GameController implements IGameController{
 
         GameBoardTile newGameBoardTile = new GameBoardTile();
         newGameBoardTile.setPosition(currentPlayer.getxPositionToPlay(), currentPlayer.getyPositionToPlay(), PropertiesManager.getInstance().getGameBoardSize());
-        newGameBoardTile.setCurrentCharOnTile(playerList.get(turnNumber%numberOfPlayer).getSymbol());
+        newGameBoardTile.setCurrentCharOnTile(playerList.get(turnNumber % numberOfPlayer).getSymbol());
 
         this.setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.MODEL_TOPIC_NAME_KEY), newGameBoardTile);
         this.setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.VIEW_TOPIC_NAME_KEY), newGameBoardTile);
 
     }
 
-    public void beforePlay() {
+    private void beforePlay() {
         System.out.println(currentPlayer.getName() + "'s Turn: ");
     }
 
-    public void afterPlay() {
+    private void afterPlay() {
         System.out.println(currentPlayer.getName() + " played.");
     }
 
-    public void updatePlayerTurn() {
+    private void updatePlayerTurn() {
         turnNumber++;
-        currentPlayer = playerList.get(turnNumber%numberOfPlayer);
+        currentPlayer = playerList.get(turnNumber % numberOfPlayer);
     }
 
-    public void initPlayersTurn() {
+    private void initPlayersTurn() {
         Random generator = new Random();
         int computerTurnNumber = generator.nextInt(numberOfPlayer);
 
