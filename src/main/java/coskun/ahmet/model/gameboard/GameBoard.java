@@ -68,42 +68,42 @@ public class GameBoard implements IGameBoard {
 
         GameBoardTile rightTile = oldGameBoardTile.getRightTile();
         newGameBoardTile.setRightTile(rightTile);
-        if(rightTile != null)
+        if (rightTile != null)
             rightTile.setLeftTile(newGameBoardTile);
 
         GameBoardTile leftTile = oldGameBoardTile.getLeftTile();
         newGameBoardTile.setLeftTile(leftTile);
-        if(leftTile != null)
+        if (leftTile != null)
             leftTile.setRightTile(newGameBoardTile);
 
         GameBoardTile upperTile = oldGameBoardTile.getUpperTile();
         newGameBoardTile.setUpperTile(upperTile);
-        if(upperTile != null)
+        if (upperTile != null)
             upperTile.setLowerTile(newGameBoardTile);
 
         GameBoardTile lowerTile = oldGameBoardTile.getLowerTile();
         newGameBoardTile.setLowerTile(lowerTile);
-        if(lowerTile != null)
+        if (lowerTile != null)
             lowerTile.setUpperTile(newGameBoardTile);
 
         GameBoardTile rightUpperTile = oldGameBoardTile.getRightUpperTile();
         newGameBoardTile.setRightUpperTile(rightUpperTile);
-        if(rightUpperTile != null)
+        if (rightUpperTile != null)
             rightUpperTile.setLeftLowerTile(newGameBoardTile);
 
         GameBoardTile rightLowerTile = oldGameBoardTile.getRightLowerTile();
         newGameBoardTile.setRightLowerTile(rightLowerTile);
-        if(rightLowerTile != null)
+        if (rightLowerTile != null)
             rightLowerTile.setLeftUpperTile(newGameBoardTile);
 
         GameBoardTile leftUpperTile = oldGameBoardTile.getLeftUpperTile();
         newGameBoardTile.setLeftUpperTile(leftUpperTile);
-        if(leftUpperTile != null)
+        if (leftUpperTile != null)
             leftUpperTile.setRightLowerTile(newGameBoardTile);
 
         GameBoardTile leftLowerTile = oldGameBoardTile.getLeftLowerTile();
         newGameBoardTile.setLeftLowerTile(leftLowerTile);
-        if(leftLowerTile != null)
+        if (leftLowerTile != null)
             leftLowerTile.setRightUpperTile(newGameBoardTile);
 
         gameBoardTileList.remove(newGameBoardTile.getPosition());

@@ -1,7 +1,7 @@
 package unit.coskun.ahmet.model.gameboard;
 
-import coskun.ahmet.model.gameboard.IGameBoard;
 import coskun.ahmet.model.gameboard.GameBoard;
+import coskun.ahmet.model.gameboard.IGameBoard;
 import coskun.ahmet.utils.PropertiesManager;
 import org.junit.Assert;
 import org.junit.BeforeClass;
