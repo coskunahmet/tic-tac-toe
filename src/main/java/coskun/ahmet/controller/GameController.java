@@ -15,6 +15,8 @@ public class GameController implements IGameController {
     private IInputController inputController = new InputController();
     private List<Player> playerList = new ArrayList<Player>();
 
+    private List<GameBoardTile> filledGameBoardTileList = new ArrayList<GameBoardTile>();
+
     private Player currentPlayer;
 
     private boolean isGamePlay = false;
@@ -72,26 +74,31 @@ public class GameController implements IGameController {
 
     public void update() {
 
+        GameBoardTile newGameBoardTile = null;
 
-        if (currentPlayer instanceof HumanPlayer) {
-            String input = inputController.getInput();
-            String[] coordinates = input.split(GameController.COORDINATE_DELIMITER);
-            int coordinateX = Integer.parseInt(coordinates[0]);
-            int coordinateY = Integer.parseInt(coordinates[1]);
+        while(!isMoveValid(newGameBoardTile)) {
+            if (currentPlayer instanceof HumanPlayer) {
+                String input = inputController.getInput();
+                String[] coordinates = input.split(GameController.COORDINATE_DELIMITER);
+                int coordinateX = Integer.parseInt(coordinates[0]);
+                int coordinateY = Integer.parseInt(coordinates[1]);
 
-            currentPlayer.setxPositionToPlay(coordinateX);
-            currentPlayer.setyPositionToPlay(coordinateY);
+                currentPlayer.setxPositionToPlay(coordinateX);
+                currentPlayer.setyPositionToPlay(coordinateY);
+            }
+
+            currentPlayer.play();
+
+            newGameBoardTile = new GameBoardTile();
+            newGameBoardTile.setPosition(currentPlayer.getxPositionToPlay(), currentPlayer.getyPositionToPlay(), PropertiesManager.getInstance().getGameBoardSize());
+            newGameBoardTile.setCurrentCharOnTile(playerList.get(turnNumber % numberOfPlayer).getSymbol());
+
         }
-
-        currentPlayer.play();
-
-        GameBoardTile newGameBoardTile = new GameBoardTile();
-        newGameBoardTile.setPosition(currentPlayer.getxPositionToPlay(), currentPlayer.getyPositionToPlay(), PropertiesManager.getInstance().getGameBoardSize());
-        newGameBoardTile.setCurrentCharOnTile(playerList.get(turnNumber % numberOfPlayer).getSymbol());
 
         this.setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.MODEL_TOPIC_NAME_KEY), newGameBoardTile);
         this.setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.VIEW_TOPIC_NAME_KEY), newGameBoardTile);
 
+        filledGameBoardTileList.add(newGameBoardTile);
     }
 
     private void beforePlay() {
@@ -134,6 +141,21 @@ public class GameController implements IGameController {
 
 
         }
+    }
+
+    private boolean isMoveValid(GameBoardTile newPlayedGameBoardTile) {
+        if(newPlayedGameBoardTile == null)
+            return false;
+
+        for(GameBoardTile filledGameBoardTile : filledGameBoardTileList) {
+            if(newPlayedGameBoardTile.getPosition() == filledGameBoardTile.getPosition()) {
+                if(currentPlayer instanceof HumanPlayer)
+                    System.out.println("Selected Tile is Full. Please choose another tile. ");
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

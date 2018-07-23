@@ -12,6 +12,8 @@ public class GameBoard implements IGameBoard {
 
     private static GameBoard instance = null;
 
+    private boolean isGameComplete;
+
     private GameBoard() {
         sizeOfGameBoardInt = PropertiesManager.getInstance().getGameBoardSize();
         initGameBoard(sizeOfGameBoardInt);
@@ -105,8 +107,44 @@ public class GameBoard implements IGameBoard {
         if (leftLowerTile != null)
             leftLowerTile.setRightUpperTile(newGameBoardTile);
 
+        System.out.println("Is Win: " + isWin(newGameBoardTile));
+
         gameBoardTileList.remove(newGameBoardTile.getPosition());
         gameBoardTileList.put(newGameBoardTile.getPosition(), newGameBoardTile);
+    }
+
+    public boolean isWin(GameBoardTile newGameBoardTile) {
+        return isRowWin(newGameBoardTile) || isColWin(newGameBoardTile) || isDiagWin(newGameBoardTile);
+    }
+
+    public boolean isRowWin(GameBoardTile newGameBoardTile) {
+
+        int getYPosition = newGameBoardTile.getPosition() / sizeOfGameBoardInt;
+
+        GameBoardTile firstTileOnYPosition = gameBoardTileList.get(getYPosition * sizeOfGameBoardInt);
+        int numberOfCharRepeat = 0;
+
+        for(int i = 0; i < sizeOfGameBoardInt && numberOfCharRepeat < 3; i++) {
+            if(firstTileOnYPosition.getCurrentCharOnTile() == newGameBoardTile.getCurrentCharOnTile())
+                numberOfCharRepeat++;
+            else
+                numberOfCharRepeat = 0;
+
+            firstTileOnYPosition = firstTileOnYPosition.getRightTile();
+
+        }
+        if(numberOfCharRepeat == 3)
+            return true;
+
+        return false;
+    }
+    public boolean isColWin(GameBoardTile newGameBoardTile) {
+
+        return false;
+    }
+    public boolean isDiagWin(GameBoardTile newGameBoardTile) {
+
+        return false;
     }
 
     public String getGameBoardStr() {
