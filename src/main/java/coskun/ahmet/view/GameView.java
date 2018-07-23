@@ -31,6 +31,8 @@ public class GameView implements IGameView {
 
     public void updateGameBoard(int position, char newChar) {
         gameBoard[position / sizeOfGameBoardInt][position % sizeOfGameBoardInt] = newChar;
+
+        showGameBoard();
     }
 
 }

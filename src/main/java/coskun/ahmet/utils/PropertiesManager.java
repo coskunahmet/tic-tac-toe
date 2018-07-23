@@ -17,7 +17,10 @@ public class PropertiesManager {
     private final static String GAME_CONFIG_FILE = "config" + File.separator + "config.properties";
     private final static String TOPIC_CONFIG_FILE = "topic" + File.separator + "topic.properties";
 
-    public final static String SIZE_OF_GAME_BOARD = "size.of.game.board";
+    public final static String SIZE_OF_GAME_BOARD_KEY = "size.of.game.board";
+    public final static String FIRST_PLAYER_CHAR_KEY = "first.player.character";
+    public final static String SECOND_PLAYER_CHAR_KEY = "second.player.character";
+    public final static String COMPUTER_PLAYER_CHAR_KEY = "computer.player.character";
     public final static String MODEL_TOPIC_NAME_KEY = "model.topic.name";
     public final static String VIEW_TOPIC_NAME_KEY = "view.topic.name";
 
@@ -95,7 +98,7 @@ public class PropertiesManager {
 
     //size of gameboard should be between 3x3 and 10x10
     private boolean isSizeOfGameBoardValid() throws NumberFormatException {
-        String sizeOfGameBoardStr = this.gameProperties.getProperty(SIZE_OF_GAME_BOARD);
+        String sizeOfGameBoardStr = this.gameProperties.getProperty(SIZE_OF_GAME_BOARD_KEY);
 
         int sizeOfGameBoardInt = Integer.parseInt(sizeOfGameBoardStr);
 
@@ -103,7 +106,7 @@ public class PropertiesManager {
     }
 
     public int getGameBoardSize() {
-        String sizeOfGameBoardStr = getInstance().getGameProperty(PropertiesManager.SIZE_OF_GAME_BOARD);
+        String sizeOfGameBoardStr = getInstance().getGameProperty(PropertiesManager.SIZE_OF_GAME_BOARD_KEY);
 
         return Integer.parseInt(sizeOfGameBoardStr);
     }
