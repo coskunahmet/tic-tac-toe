@@ -61,11 +61,11 @@ public class GameController implements IGameController{
 
         GameBoardTile newGameBoardTile = new GameBoardTile();
         newGameBoardTile.setPosition(coordinateX, coordinateY, PropertiesManager.getInstance().getGameBoardSize());
+        //TODO get current player' s char and put it
         newGameBoardTile.setCurrentCharOnTile(PropertiesManager.getInstance().getGameProperty(PropertiesManager.FIRST_PLAYER_CHAR_KEY).charAt(0));
 
         this.setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.MODEL_TOPIC_NAME_KEY), newGameBoardTile);
         this.setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.VIEW_TOPIC_NAME_KEY), newGameBoardTile);
-
 
     }
 }

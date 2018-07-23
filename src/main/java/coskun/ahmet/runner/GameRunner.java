@@ -1,6 +1,7 @@
 package coskun.ahmet.runner;
 
 import coskun.ahmet.controller.GameController;
+import coskun.ahmet.controller.IGameController;
 import coskun.ahmet.model.gameboard.GameBoardObserver;
 import coskun.ahmet.utils.PropertiesManager;
 import coskun.ahmet.view.GameViewObserver;
@@ -15,7 +16,7 @@ public class GameRunner {
             return;
         }
 
-        GameController gameController = new GameController();
+        IGameController gameController = new GameController();
         GameViewObserver gameViewObserver = new GameViewObserver();
         GameBoardObserver gameBoardObserver = new GameBoardObserver();
 
