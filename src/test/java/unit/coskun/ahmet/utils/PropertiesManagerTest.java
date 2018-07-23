@@ -10,8 +10,7 @@ public class PropertiesManagerTest {
 
     @Test
     public void testPropertiesFileGivenAllInputsWhenHasValueThenGameCanStart() {
-        PropertiesManager propertiesManager = null;
-        propertiesManager = PropertiesManager.getInstance();
+        PropertiesManager propertiesManager = PropertiesManager.getInstance();
 
         String sizeOfGameBoardPropertyName = "size.of.game.board";
         String val = propertiesManager.getGameProperty(sizeOfGameBoardPropertyName);
@@ -36,8 +35,7 @@ public class PropertiesManagerTest {
 
     @Test
     public void testPropertiesFileGivenTwoPlayerInputWhenSameCharThenGameCanNotStart() {
-        PropertiesManager propertiesManager = null;
-        propertiesManager = PropertiesManager.getInstance();
+        PropertiesManager propertiesManager = PropertiesManager.getInstance();
 
         assertTrue(propertiesManager.isPropertiesValid());
     }

@@ -6,5 +6,5 @@ public interface IGameBoard {
 
     Map<Integer, GameBoardTile> getGameBoardTileList();
 
-    public void updateGameBoard(int position, char newChar);
+    void updateGameBoard(int position, char newChar);
 }

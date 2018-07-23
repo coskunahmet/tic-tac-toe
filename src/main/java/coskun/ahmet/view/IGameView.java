@@ -2,7 +2,7 @@ package coskun.ahmet.view;
 
 public interface IGameView {
 
-    public void showGameBoard();
+    void showGameBoard();
 
-    public void updateGameBoard(int position, char newChar);
+    void updateGameBoard(int position, char newChar);
 }
