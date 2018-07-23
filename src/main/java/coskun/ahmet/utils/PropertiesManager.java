@@ -15,15 +15,21 @@ public class PropertiesManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(PropertiesManager.class);
 
     private final static String GAME_CONFIG_FILE = "config" + File.separator + "config.properties";
+    private final static String TOPIC_CONFIG_FILE = "topic" + File.separator + "topic.properties";
 
     public final static String SIZE_OF_PLAYGROUND = "size.of.playground";
+    public final static String MODEL_TOPIC_NAME_KEY = "model.topic.name";
+    public final static String VIEW_TOPIC_NAME_KEY = "view.topic.name";
 
     private Properties gameProperties;
+
+    private Properties topicProperties;
 
     private static PropertiesManager instance = null;
 
     private PropertiesManager() {
         gameProperties = new Properties();
+        topicProperties = new Properties();
     }
 
     public static PropertiesManager getInstance() {
@@ -44,6 +50,13 @@ public class PropertiesManager {
                 return;
             }
             gameProperties.load(input);
+
+            input = PropertiesManager.class.getClassLoader().getResourceAsStream(TOPIC_CONFIG_FILE);
+            if (input == null) {
+                LOGGER.error("Unable to find configuration file: ", TOPIC_CONFIG_FILE);
+                return;
+            }
+            topicProperties.load(input);
         } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
@@ -89,11 +102,21 @@ public class PropertiesManager {
         return sizeOfPlaygroundInt >= 3 && sizeOfPlaygroundInt <= 10;
     }
 
-    public String getProperty(String key) {
+    public String getGameProperty(String key) {
         String val = null;
         if (key != null) {
             if (gameProperties != null)
                 val = gameProperties.getProperty(key);
+        }
+        return val;
+
+    }
+
+    public String getTopicProperty(String key) {
+        String val = null;
+        if (key != null) {
+            if (topicProperties != null)
+                val = topicProperties.getProperty(key);
         }
         return val;
 
