@@ -9,11 +9,13 @@ public class InputController implements IInputController {
         Scanner in = new Scanner(System.in);
         String input = in.nextLine();
 
+        checkInput();
+
         return input;
 
     }
 
-    public void checkInput() {
+    private void checkInput() {
 
         //TODO check if input valid
     }
