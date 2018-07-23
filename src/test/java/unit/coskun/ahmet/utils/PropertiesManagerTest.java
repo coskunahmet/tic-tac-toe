@@ -12,10 +12,10 @@ public class PropertiesManagerTest {
         PropertiesManager propertiesManager = null;
         propertiesManager = PropertiesManager.getInstance();
 
-        String sizeOfPlaygroundPropertyName = "size.of.playground";
-        String val = propertiesManager.getGameProperty(sizeOfPlaygroundPropertyName);
-        assertNotEquals(sizeOfPlaygroundPropertyName + " value should be different than null", val, null);
-        assertNotEquals(sizeOfPlaygroundPropertyName + " value should be different than empty", val, "");
+        String sizeOfGameBoardPropertyName = "size.of.game.board";
+        String val = propertiesManager.getGameProperty(sizeOfGameBoardPropertyName);
+        assertNotEquals(sizeOfGameBoardPropertyName + " value should be different than null", val, null);
+        assertNotEquals(sizeOfGameBoardPropertyName + " value should be different than empty", val, "");
 
         String firstPlayerCharacterPropertyName = "first.player.character";
         val = propertiesManager.getGameProperty(firstPlayerCharacterPropertyName);

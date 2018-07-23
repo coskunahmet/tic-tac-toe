@@ -4,34 +4,34 @@ import coskun.ahmet.utils.PropertiesManager;
 
 public class GameView implements IGameView {
 
-    private char[][] playground;
-    private int sizeOfPlaygroundInt;
+    private char[][] gameBoard;
+    private int sizeOfGameBoardInt;
 
     public GameView() {
-        String sizeOfPlaygroundStr = PropertiesManager.getInstance().getGameProperty(PropertiesManager.SIZE_OF_PLAYGROUND);
-        sizeOfPlaygroundInt = Integer.parseInt(sizeOfPlaygroundStr);
+        String sizeOfGameBoardStr = PropertiesManager.getInstance().getGameProperty(PropertiesManager.SIZE_OF_GAME_BOARD);
+        sizeOfGameBoardInt = Integer.parseInt(sizeOfGameBoardStr);
 
-        playground = new char[sizeOfPlaygroundInt][sizeOfPlaygroundInt];
+        gameBoard = new char[sizeOfGameBoardInt][sizeOfGameBoardInt];
 
-        for (int i = 0; i < sizeOfPlaygroundInt; i++) {
-            for (int j = 0; j < sizeOfPlaygroundInt; j++) {
-                playground[i][j] = '~';
+        for (int i = 0; i < sizeOfGameBoardInt; i++) {
+            for (int j = 0; j < sizeOfGameBoardInt; j++) {
+                gameBoard[i][j] = '~';
             }
         }
     }
 
-    public void showPlayground() {
+    public void showGameBoard() {
 
-        for (int i = 0; i < sizeOfPlaygroundInt; i++) {
+        for (int i = 0; i < sizeOfGameBoardInt; i++) {
             System.out.println();
-            for (int j = 0; j < sizeOfPlaygroundInt; j++) {
-                System.out.print(playground[i][j]);
+            for (int j = 0; j < sizeOfGameBoardInt; j++) {
+                System.out.print(gameBoard[i][j]);
             }
         }
     }
 
-    public void updatePlayground(int position, char newChar) {
-        playground[position / sizeOfPlaygroundInt][position % sizeOfPlaygroundInt] = newChar;
+    public void updateGameBoard(int position, char newChar) {
+        gameBoard[position / sizeOfGameBoardInt][position % sizeOfGameBoardInt] = newChar;
     }
 
 }
