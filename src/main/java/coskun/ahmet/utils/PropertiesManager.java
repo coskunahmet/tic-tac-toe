@@ -102,6 +102,12 @@ public class PropertiesManager {
         return sizeOfGameBoardInt >= 3 && sizeOfGameBoardInt <= 10;
     }
 
+    public int getGameBoardSize() {
+        String sizeOfGameBoardStr = getInstance().getGameProperty(PropertiesManager.SIZE_OF_GAME_BOARD);
+
+        return Integer.parseInt(sizeOfGameBoardStr);
+    }
+
     public String getGameProperty(String key) {
         String val = null;
         if (key != null) {

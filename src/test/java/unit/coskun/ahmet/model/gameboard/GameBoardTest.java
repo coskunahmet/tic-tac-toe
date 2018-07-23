@@ -15,8 +15,7 @@ public class GameBoardTest {
     @BeforeClass
     public static void initializeGameBoard() {
         gameBoard = GameBoard.getInstance();
-        String sizeOfGameBoardStr = PropertiesManager.getInstance().getGameProperty(PropertiesManager.SIZE_OF_GAME_BOARD);
-        sizeOfGameBoardInt = Integer.parseInt(sizeOfGameBoardStr);
+        sizeOfGameBoardInt = PropertiesManager.getInstance().getGameBoardSize();
     }
 
     @Test
@@ -120,8 +119,7 @@ public class GameBoardTest {
     @Test
     public void showEachGameBoardTilesWithNeighboursWhenInitializedProperly() {
         GameBoard gameBoard = GameBoard.getInstance();
-        String sizeOfGameBoardStr = PropertiesManager.getInstance().getGameProperty(PropertiesManager.SIZE_OF_GAME_BOARD);
-        int sizeOfGameBoardInt = Integer.parseInt(sizeOfGameBoardStr);
+        int sizeOfGameBoardInt = PropertiesManager.getInstance().getGameBoardSize();
 
         for (int i = 0; i < sizeOfGameBoardInt; i++)
             for (int j = 0; j < sizeOfGameBoardInt; j++)

@@ -13,8 +13,7 @@ public class GameBoard implements IGameBoard {
     private static GameBoard instance = null;
 
     private GameBoard() {
-        String sizeOfGameBoardStr = PropertiesManager.getInstance().getGameProperty(PropertiesManager.SIZE_OF_GAME_BOARD);
-        sizeOfGameBoardInt = Integer.parseInt(sizeOfGameBoardStr);
+        sizeOfGameBoardInt = PropertiesManager.getInstance().getGameBoardSize();
         initGameBoard(sizeOfGameBoardInt);
     }
 
