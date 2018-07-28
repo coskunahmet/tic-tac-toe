@@ -2,6 +2,7 @@ package coskun.ahmet.controller;
 
 import coskun.ahmet.exception.InvalidInputException;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class InputController implements IInputController {
@@ -10,7 +11,7 @@ public class InputController implements IInputController {
 
     private final String regex = "^\\d+,\\d+$";
 
-    public int[] getInput() throws InvalidInputException {
+    public int[] getInput() throws InvalidInputException, NoSuchElementException {
 
         Scanner in = new Scanner(System.in);
         String input = in.nextLine();

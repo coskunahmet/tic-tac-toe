@@ -4,6 +4,8 @@ import coskun.ahmet.controller.IInputController;
 import coskun.ahmet.controller.InputController;
 import coskun.ahmet.exception.InvalidInputException;
 
+import java.util.NoSuchElementException;
+
 public class HumanPlayer extends Player {
 
 
@@ -17,7 +19,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public int[] getInput() throws InvalidInputException {
+    public int[] getInput() throws InvalidInputException, NoSuchElementException {
 
         int[] coordinates = inputController.getInput();
         this.setxPositionToPlay(coordinates[0]);

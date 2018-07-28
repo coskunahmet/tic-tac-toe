@@ -14,6 +14,7 @@ import coskun.ahmet.utils.PropertiesManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 public class GameController extends Observer implements IGameController {
@@ -66,7 +67,7 @@ public class GameController extends Observer implements IGameController {
             newGameBoardTile.setCurrentCharOnTile(playerList.get(turnNumber % numberOfPlayer).getSymbol());
 
             ObserverManager.getInstance().setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_MODEL_TOPIC_NAME_KEY), newGameBoardTile);
-        } catch (InvalidInputException e) {
+        } catch (InvalidInputException | NoSuchElementException e) {
             ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.INVALID_INPUT, ""));
         }
 
