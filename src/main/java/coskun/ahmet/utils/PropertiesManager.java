@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ public class PropertiesManager {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PropertiesManager.class);
 
-    private final static String GAME_CONFIG_FILE = "config" + File.separator + "config.properties";
+    public static String GAME_CONFIG_FILE = "config" + File.separator + "config.properties";
     private final static String TOPIC_CONFIG_FILE = "topic" + File.separator + "topic.properties";
 
     private final static String SIZE_OF_GAME_BOARD_KEY = "size.of.game.board";
@@ -32,6 +33,8 @@ public class PropertiesManager {
 
     private static PropertiesManager instance = null;
 
+    public static boolean DEFAULT_CONFIG = true;
+
     private PropertiesManager() {
         gameProperties = new Properties();
         topicProperties = new Properties();
@@ -40,6 +43,7 @@ public class PropertiesManager {
     public static PropertiesManager getInstance() {
         if (instance == null) {
             instance = new PropertiesManager();
+            LOGGER.info("Config files are going to be loaded");
             instance.loadProperties();
         }
 
@@ -49,16 +53,23 @@ public class PropertiesManager {
     private void loadProperties() {
         InputStream input = null;
         try {
-            input = PropertiesManager.class.getClassLoader().getResourceAsStream(GAME_CONFIG_FILE);
-            if (input == null) {
-                LOGGER.error("Unable to find configuration file: ", GAME_CONFIG_FILE);
-                return;
+
+            LOGGER.info(GAME_CONFIG_FILE + " is going to be loaded.");
+            if (DEFAULT_CONFIG) {
+                input = PropertiesManager.class.getClassLoader().getResourceAsStream(GAME_CONFIG_FILE);
+                if (input == null) {
+                    LOGGER.error("Unable to find configuration file: " + GAME_CONFIG_FILE);
+                    return;
+                }
+            } else {
+                input = new FileInputStream(GAME_CONFIG_FILE);
             }
             gameProperties.load(input);
 
+            LOGGER.info(TOPIC_CONFIG_FILE + " is going to be loaded.");
             input = PropertiesManager.class.getClassLoader().getResourceAsStream(TOPIC_CONFIG_FILE);
             if (input == null) {
-                LOGGER.error("Unable to find configuration file: ", TOPIC_CONFIG_FILE);
+                LOGGER.error("Unable to find configuration file: " + TOPIC_CONFIG_FILE);
                 return;
             }
             topicProperties.load(input);
