@@ -1,21 +1,21 @@
 package coskun.ahmet.controller;
 
-import coskun.ahmet.Observer;
+import coskun.ahmet.enums.GameNotification;
 import coskun.ahmet.model.gameboard.GameBoardTile;
 import coskun.ahmet.model.player.ComputerPlayer;
 import coskun.ahmet.model.player.HumanPlayer;
 import coskun.ahmet.model.player.Player;
+import coskun.ahmet.observer.Observer;
+import coskun.ahmet.observer.ObserverManager;
 import coskun.ahmet.utils.PropertiesManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-public class GameController implements IGameController {
+public class GameController extends Observer implements IGameController {
 
-    private Map<String, List<Observer>> observers = new HashMap<String, List<Observer>>();
-    private IInputController inputController = new InputController();
     private List<Player> playerList = new ArrayList<Player>();
-
-    private List<GameBoardTile> filledGameBoardTileList = new ArrayList<GameBoardTile>();
 
     private Player currentPlayer;
 
@@ -23,28 +23,11 @@ public class GameController implements IGameController {
 
     private int turnNumber;
 
-    private static final String COORDINATE_DELIMITER = ",";
     private final int numberOfPlayer = 3;
 
     public GameController() {
-        observers.put(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.MODEL_TOPIC_NAME_KEY), new ArrayList<Observer>());
-        observers.put(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.VIEW_TOPIC_NAME_KEY), new ArrayList<Observer>());
-
-    }
 
 
-    private void setGameBoardTile(String topic, GameBoardTile gameBoardTile) {
-        notifyAllObservers(topic, gameBoardTile);
-    }
-
-    public void attach(Observer observer, String topic) {
-        observers.get(topic).add(observer);
-    }
-
-    public void notifyAllObservers(String topic, GameBoardTile gameBoardTile) {
-        for (Observer observer : observers.get(topic)) {
-            observer.update(gameBoardTile.getPosition(), gameBoardTile.getCurrentCharOnTile());
-        }
     }
 
     public void init() {
@@ -56,6 +39,9 @@ public class GameController implements IGameController {
         turnNumber = -1;
 
         isGamePlay = true;
+
+        ObserverManager.getInstance().attachObserver(this, PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY));
+
         start();
     }
 
@@ -66,9 +52,6 @@ public class GameController implements IGameController {
         while (isGamePlay) {
             beforePlay();
             update();
-            afterPlay();
-
-            updatePlayerTurn();
         }
     }
 
@@ -76,37 +59,21 @@ public class GameController implements IGameController {
 
         GameBoardTile newGameBoardTile = null;
 
-        while(!isMoveValid(newGameBoardTile)) {
-            if (currentPlayer instanceof HumanPlayer) {
-                String input = inputController.getInput();
-                String[] coordinates = input.split(GameController.COORDINATE_DELIMITER);
-                int coordinateX = Integer.parseInt(coordinates[0]);
-                int coordinateY = Integer.parseInt(coordinates[1]);
+        currentPlayer.getInput();
 
-                currentPlayer.setxPositionToPlay(coordinateX);
-                currentPlayer.setyPositionToPlay(coordinateY);
-            }
+        newGameBoardTile = new GameBoardTile();
+        newGameBoardTile.setPosition(currentPlayer.getxPositionToPlay(), currentPlayer.getyPositionToPlay(), PropertiesManager.getInstance().getGameBoardSize());
+        newGameBoardTile.setCurrentCharOnTile(playerList.get(turnNumber % numberOfPlayer).getSymbol());
 
-            currentPlayer.play();
+        ObserverManager.getInstance().setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_MODEL_TOPIC_NAME_KEY), newGameBoardTile);
 
-            newGameBoardTile = new GameBoardTile();
-            newGameBoardTile.setPosition(currentPlayer.getxPositionToPlay(), currentPlayer.getyPositionToPlay(), PropertiesManager.getInstance().getGameBoardSize());
-            newGameBoardTile.setCurrentCharOnTile(playerList.get(turnNumber % numberOfPlayer).getSymbol());
+    }
 
+    public void update(GameNotification gameNotification) {
+
+        if (gameNotification.equals(GameNotification.NEXT_PLAYER)) {
+            updatePlayerTurn();
         }
-
-        this.setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.MODEL_TOPIC_NAME_KEY), newGameBoardTile);
-        this.setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.VIEW_TOPIC_NAME_KEY), newGameBoardTile);
-
-        filledGameBoardTileList.add(newGameBoardTile);
-    }
-
-    private void beforePlay() {
-        System.out.println(currentPlayer.getName() + "'s Turn: ");
-    }
-
-    private void afterPlay() {
-        System.out.println(currentPlayer.getName() + " played.");
     }
 
     private void updatePlayerTurn() {
@@ -128,34 +95,26 @@ public class GameController implements IGameController {
                 playerList.add(new ComputerPlayer("Computer", computerPlayerSymbol));
                 playerList.add(new HumanPlayer("Ahmet", firstPlayerSymbol));
                 playerList.add(new HumanPlayer("Murat", secondPlayerSymbol));
-
+                break;
             case 1:
                 playerList.add(new HumanPlayer("Ahmet", firstPlayerSymbol));
                 playerList.add(new ComputerPlayer("Computer", computerPlayerSymbol));
                 playerList.add(new HumanPlayer("Murat", secondPlayerSymbol));
-
+                break;
             case 2:
                 playerList.add(new HumanPlayer("Ahmet", firstPlayerSymbol));
                 playerList.add(new HumanPlayer("Murat", secondPlayerSymbol));
                 playerList.add(new ComputerPlayer("Computer", computerPlayerSymbol));
-
+                break;
 
         }
     }
 
-    private boolean isMoveValid(GameBoardTile newPlayedGameBoardTile) {
-        if(newPlayedGameBoardTile == null)
-            return false;
-
-        for(GameBoardTile filledGameBoardTile : filledGameBoardTileList) {
-            if(newPlayedGameBoardTile.getPosition() == filledGameBoardTile.getPosition()) {
-                if(currentPlayer instanceof HumanPlayer)
-                    System.out.println("Selected Tile is Full. Please choose another tile. ");
-                return false;
-            }
-        }
-
-        return true;
+    private void beforePlay() {
+        System.out.println(currentPlayer.getName() + "'s Turn: ");
     }
 
+    private void afterPlay() {
+        System.out.println(currentPlayer.getName() + " played.");
+    }
 }

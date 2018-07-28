@@ -11,13 +11,21 @@ public class ComputerPlayer extends Player {
     }
 
     @Override
-    public void play() {
-        this.setxPositionToPlay(generatePositionToPlay());
-        this.setyPositionToPlay(generatePositionToPlay());
+    public int[] getInput() {
+
+        int[] coordinates = new int[2];
+        coordinates[0] = generatePositionToPlay();
+        coordinates[1] = generatePositionToPlay();
+        this.setxPositionToPlay(coordinates[0]);
+        this.setyPositionToPlay(coordinates[1]);
+
+        return coordinates;
+
     }
 
     private int generatePositionToPlay() {
         Random generator = new Random();
+        System.out.println("generated. ");
         return generator.nextInt(PropertiesManager.getInstance().getGameBoardSize()) + 1;
     }
 }

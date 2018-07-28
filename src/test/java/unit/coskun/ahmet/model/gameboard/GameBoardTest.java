@@ -1,7 +1,6 @@
 package unit.coskun.ahmet.model.gameboard;
 
 import coskun.ahmet.model.gameboard.GameBoard;
-import coskun.ahmet.model.gameboard.IGameBoard;
 import coskun.ahmet.utils.PropertiesManager;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -9,12 +8,12 @@ import org.junit.Test;
 
 public class GameBoardTest {
 
-    private static IGameBoard gameBoard;
+    private static GameBoard gameBoard;
     private static int sizeOfGameBoardInt;
 
     @BeforeClass
     public static void initializeGameBoard() {
-        gameBoard = GameBoard.getInstance();
+        gameBoard = new GameBoard();
         sizeOfGameBoardInt = PropertiesManager.getInstance().getGameBoardSize();
     }
 
@@ -40,7 +39,7 @@ public class GameBoardTest {
 
     @Test
     public void testGameBoardGivenGameBoardIsEmptyGivenUpdateWithFirstPlayerCharThenPutFirstPlayerCharToGameBoard(int position) {
-        gameBoard.updateGameBoard(position, PropertiesManager.getInstance().getGameProperty("first.player.character").charAt(0));
+        gameBoard.update(position, PropertiesManager.getInstance().getGameProperty("first.player.character").charAt(0));
 
         Assert.assertEquals(gameBoard.getGameBoardTileList().get(0).getCurrentCharOnTile(), 'X');
         Assert.assertEquals(gameBoard.getGameBoardTileList().get(1).getLeftTile().getCurrentCharOnTile(), 'X');
@@ -112,13 +111,13 @@ public class GameBoardTest {
 
     @Test
     public void showGameBoardWhenInitializedProperly() {
-        GameBoard gameBoard = GameBoard.getInstance();
+        GameBoard gameBoard = new GameBoard();
         System.out.println(gameBoard.getGameBoardStr());
     }
 
     @Test
     public void showEachGameBoardTilesWithNeighboursWhenInitializedProperly() {
-        GameBoard gameBoard = GameBoard.getInstance();
+        GameBoard gameBoard = new GameBoard();
         int sizeOfGameBoardInt = PropertiesManager.getInstance().getGameBoardSize();
 
         for (int i = 0; i < sizeOfGameBoardInt; i++)
