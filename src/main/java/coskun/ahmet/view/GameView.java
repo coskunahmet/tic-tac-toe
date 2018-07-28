@@ -60,7 +60,7 @@ public class GameView extends GameMoveObserver implements IGameView {
             } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END)) {
                 System.out.println("Game END. Winner: " + ((GameViewNotification) gameNotification).getParameterList());
             } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.INVALID_INPUT)) {
-                System.out.println("Invalid Input. Valid Input Pattern: <integer between 1 and " + PropertiesManager.getInstance().getGameBoardSize() + ">,<integer between 0 and " + PropertiesManager.getInstance().getGameBoardSize() + ">");
+                System.out.println("Invalid Input. Valid Input Pattern: <integer between 1 and " + PropertiesManager.getInstance().getGameBoardSize() + ">,<integer between 1 and " + PropertiesManager.getInstance().getGameBoardSize() + ">");
             } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END_WITHOUT_WINNER)) {
                 System.out.println("Game END. No Winner.");
             }

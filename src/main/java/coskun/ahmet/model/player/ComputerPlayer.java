@@ -4,12 +4,16 @@ import coskun.ahmet.model.GameNotification;
 import coskun.ahmet.observer.IGameMoveObserver;
 import coskun.ahmet.observer.ObserverManager;
 import coskun.ahmet.utils.PropertiesManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class ComputerPlayer extends Player implements IGameMoveObserver {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ComputerPlayer.class);
 
     private List<Integer> filledTilePositionList;
 
@@ -29,6 +33,8 @@ public class ComputerPlayer extends Player implements IGameMoveObserver {
         while (!isGeneratedPositionValid(generatedPosition)) {
             generatedPosition = generatePositionToPlay();
         }
+
+        LOGGER.info("Computer generated position: " + generatedPosition);
 
         coordinates[0] = generatedPosition / PropertiesManager.getInstance().getGameBoardSize() + 1;
         coordinates[1] = generatedPosition % PropertiesManager.getInstance().getGameBoardSize() + 1;
@@ -51,7 +57,7 @@ public class ComputerPlayer extends Player implements IGameMoveObserver {
 
     private int generatePositionToPlay() {
         Random generator = new Random();
-        return generator.nextInt(PropertiesManager.getInstance().getGameBoardSize() * PropertiesManager.getInstance().getGameBoardSize()) + 1;
+        return generator.nextInt(PropertiesManager.getInstance().getGameBoardSize() * PropertiesManager.getInstance().getGameBoardSize());
     }
 
     @Override

@@ -10,7 +10,7 @@ public class InputController implements IInputController {
 
     private static final String COORDINATE_DELIMITER = ",";
 
-    private final String regex = "^\\d+,\\d+$";
+    private final String regex = "^[1-9]+,[1-9]+$";
 
     public int[] getInput() throws InvalidInputException, NoSuchElementException {
 
