@@ -58,10 +58,25 @@ public class GameView extends GameMoveObserver implements IGameView {
                 System.out.println();
                 System.out.println("---------------------------");
             } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END)) {
-                System.out.println("Game END. Winner: " + ((GameViewNotification) gameNotification).getParameterList());
+
+                System.out.println(((GameViewNotification) gameNotification).getParameterList().get(0)
+                        + " played to "
+                        + ((GameViewNotification) gameNotification).getParameterList().get(1)
+                        + ","
+                        + ((GameViewNotification) gameNotification).getParameterList().get(2));
+                System.out.println();
+                System.out.println("---------------------------");
+                System.out.println("Game END. Winner: " + ((GameViewNotification) gameNotification).getParameterList().get(0));
             } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.INVALID_INPUT)) {
                 System.out.println("Invalid Input. Valid Input Pattern: <integer between 1 and " + PropertiesManager.getInstance().getGameBoardSize() + ">,<integer between 1 and " + PropertiesManager.getInstance().getGameBoardSize() + ">");
             } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END_WITHOUT_WINNER)) {
+                System.out.println(((GameViewNotification) gameNotification).getParameterList().get(0)
+                        + " played to "
+                        + ((GameViewNotification) gameNotification).getParameterList().get(1)
+                        + ","
+                        + ((GameViewNotification) gameNotification).getParameterList().get(2));
+                System.out.println();
+                System.out.println("---------------------------");
                 System.out.println("Game END. No Winner.");
             }
         } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.MOVE_IS_NOT_VALID)) {

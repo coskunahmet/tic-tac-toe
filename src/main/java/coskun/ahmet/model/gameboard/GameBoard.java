@@ -5,11 +5,15 @@ import coskun.ahmet.model.GameNotification;
 import coskun.ahmet.observer.GameMoveObserver;
 import coskun.ahmet.observer.ObserverManager;
 import coskun.ahmet.utils.PropertiesManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class GameBoard extends GameMoveObserver implements IGameBoard {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(GameBoard.class);
 
     private Map<Integer, GameBoardTile> gameBoardTileList;
     private int sizeOfGameBoardInt;
@@ -152,9 +156,9 @@ public class GameBoard extends GameMoveObserver implements IGameBoard {
 
     private boolean isRowWin(GameBoardTile newGameBoardTile) {
 
-        int getYPosition = newGameBoardTile.getPosition() / sizeOfGameBoardInt;
+        int getYPositionOfNewTile = newGameBoardTile.getPosition() / sizeOfGameBoardInt;
 
-        GameBoardTile firstTileOnYPosition = gameBoardTileList.get(getYPosition * sizeOfGameBoardInt);
+        GameBoardTile firstTileOnYPosition = gameBoardTileList.get(getYPositionOfNewTile * sizeOfGameBoardInt);
         int numberOfCharRepeat = 0;
 
         for(int i = 0; i < sizeOfGameBoardInt && numberOfCharRepeat < 3; i++) {
@@ -166,19 +170,88 @@ public class GameBoard extends GameMoveObserver implements IGameBoard {
             firstTileOnYPosition = firstTileOnYPosition.getRightTile();
 
         }
-        if(numberOfCharRepeat == 3)
+        if (numberOfCharRepeat == 3) {
+            LOGGER.info("Row Win happened.");
             return true;
+        }
 
         return false;
     }
 
     private boolean isColWin(GameBoardTile newGameBoardTile) {
-        //TODO check col win
+
+        int getXPositionOfFirstTileOnSameColumn = newGameBoardTile.getPosition() % sizeOfGameBoardInt;
+
+        GameBoardTile firstTileOnXPosition = gameBoardTileList.get(getXPositionOfFirstTileOnSameColumn);
+        int numberOfCharRepeat = 0;
+
+        for (int i = 0; i < sizeOfGameBoardInt && numberOfCharRepeat < 3; i++) {
+            if (firstTileOnXPosition.getCurrentCharOnTile() == newGameBoardTile.getCurrentCharOnTile())
+                numberOfCharRepeat++;
+            else
+                numberOfCharRepeat = 0;
+
+            firstTileOnXPosition = firstTileOnXPosition.getLowerTile();
+
+        }
+        if (numberOfCharRepeat == 3) {
+
+            LOGGER.info("Col Win happened.");
+            return true;
+        }
         return false;
     }
 
     private boolean isDiagWin(GameBoardTile newGameBoardTile) {
-        //TODO check diag win
+
+        int numberOfCharRepeat = 0;
+
+        //Right To Left diag check
+        GameBoardTile getFirstTileOfLeftToRightDiagonal = newGameBoardTile;
+        for (int i = 0; i < sizeOfGameBoardInt && getFirstTileOfLeftToRightDiagonal.getLeftUpperTile() != null; i++) {
+            getFirstTileOfLeftToRightDiagonal = getFirstTileOfLeftToRightDiagonal.getLeftUpperTile();
+        }
+
+
+        for (int i = 0; i < sizeOfGameBoardInt && numberOfCharRepeat < 3 && getFirstTileOfLeftToRightDiagonal != null; i++) {
+            if (getFirstTileOfLeftToRightDiagonal.getCurrentCharOnTile() == newGameBoardTile.getCurrentCharOnTile()) {
+                numberOfCharRepeat++;
+            } else {
+                numberOfCharRepeat = 0;
+            }
+
+            getFirstTileOfLeftToRightDiagonal = getFirstTileOfLeftToRightDiagonal.getRightLowerTile();
+
+        }
+        if (numberOfCharRepeat == 3) {
+            LOGGER.info("Left To Right Diag Win happened.");
+            return true;
+        }
+
+
+        numberOfCharRepeat = 0;
+
+        //Left To Right diag check
+        GameBoardTile getFirstTileOfRightToLeftDiagonal = newGameBoardTile;
+
+        for (int i = 0; i < sizeOfGameBoardInt && getFirstTileOfRightToLeftDiagonal.getRightUpperTile() != null; i++) {
+            getFirstTileOfRightToLeftDiagonal = getFirstTileOfRightToLeftDiagonal.getRightUpperTile();
+        }
+
+        for (int i = 0; i < sizeOfGameBoardInt && numberOfCharRepeat < 3 && getFirstTileOfRightToLeftDiagonal != null; i++) {
+            if (getFirstTileOfRightToLeftDiagonal.getCurrentCharOnTile() == newGameBoardTile.getCurrentCharOnTile())
+                numberOfCharRepeat++;
+            else
+                numberOfCharRepeat = 0;
+
+            getFirstTileOfRightToLeftDiagonal = getFirstTileOfRightToLeftDiagonal.getLeftLowerTile();
+
+        }
+        if (numberOfCharRepeat == 3) {
+            LOGGER.info("Right To Left Diag Win happened.");
+            return true;
+        }
+
         return false;
     }
 
