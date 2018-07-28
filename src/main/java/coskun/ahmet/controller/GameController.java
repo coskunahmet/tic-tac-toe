@@ -12,10 +12,7 @@ import coskun.ahmet.observer.Observer;
 import coskun.ahmet.observer.ObserverManager;
 import coskun.ahmet.utils.PropertiesManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Random;
+import java.util.*;
 
 public class GameController extends Observer implements IGameController {
 
@@ -68,7 +65,7 @@ public class GameController extends Observer implements IGameController {
 
             ObserverManager.getInstance().setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_MODEL_TOPIC_NAME_KEY), newGameBoardTile);
         } catch (InvalidInputException | NoSuchElementException e) {
-            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.INVALID_INPUT, ""));
+            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.INVALID_INPUT, new ArrayList<>()));
         }
 
     }
@@ -77,9 +74,10 @@ public class GameController extends Observer implements IGameController {
 
         if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.NEXT_TURN)) {
             updatePlayerTurn();
-        } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END)) {
+        } else if (!(gameNotification instanceof GameViewNotification)
+                && gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END)) {
             isGameFinished = true;
-            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.GAME_END, currentPlayer.getName()));
+            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.GAME_END, Arrays.asList(currentPlayer.getName())));
         }
     }
 
@@ -120,11 +118,15 @@ public class GameController extends Observer implements IGameController {
 
     private void afterPlay() {
         if (isPlayerPlayed)
-            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.PLAYER_PLAYED, previousPlayer.getName()));
+            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY)
+                    , new GameViewNotification(GameNotificationEnum.PLAYER_PLAYED
+                            , Arrays.asList(previousPlayer.getName(), Integer.toString(previousPlayer.getxPositionToPlay()), Integer.toString(previousPlayer.getyPositionToPlay()))));
     }
 
     private void beforePlay() {
         isPlayerPlayed = false;
-        ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.TURN_OF_PLAYER, currentPlayer.getName()));
+        ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY)
+                , new GameViewNotification(GameNotificationEnum.TURN_OF_PLAYER
+                        , Arrays.asList(currentPlayer.getName())));
     }
 }
