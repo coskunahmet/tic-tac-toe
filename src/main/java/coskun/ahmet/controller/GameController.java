@@ -78,10 +78,15 @@ public class GameController extends Observer implements IGameController {
             } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END)) {
 
                 isGameFinished = true;
-                ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.GAME_END, Arrays.asList(currentPlayer.getName())));
+                GameViewNotification gameViewNotification = new GameViewNotification(GameNotificationEnum.GAME_END
+                        , Arrays.asList(currentPlayer.getName(), Integer.toString(currentPlayer.getxPositionToPlay()), Integer.toString(currentPlayer.getyPositionToPlay())));
+                ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), gameViewNotification);
             } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END_WITHOUT_WINNER)) {
                 isGameFinished = true;
-                ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.GAME_END_WITHOUT_WINNER, Collections.EMPTY_LIST));
+
+                GameViewNotification gameViewNotification = new GameViewNotification(GameNotificationEnum.GAME_END_WITHOUT_WINNER
+                        , Arrays.asList(currentPlayer.getName(), Integer.toString(currentPlayer.getxPositionToPlay()), Integer.toString(currentPlayer.getyPositionToPlay())));
+                ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), gameViewNotification);
             }
         }
     }
