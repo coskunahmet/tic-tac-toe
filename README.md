@@ -1,15 +1,19 @@
 # tic-tac-toe
 This is a scalable, multiplayer tic tac toe game.
+## Requirements
+- JDK 1.8 or above
+- Maven 3 or above
+
 ## How to Run the game
 First, you must generate jar file with `maven:install` goal. After, you run this goal, it will generate a jar file with `-jar-with-dependencies` suffix in `target` folder.
 This is the runnable jar file of this project. You should run this jar file on `command prompt` by standard java execution command:
 
-`java -jar tic-tac-toe-1.0-SNAPSHOT-jar-with-dependencies.jar`
+`java -jar tic-tac-toe-1.0-jar-with-dependencies.jar`
 
 This will execute application by default configuration.
 There is another usage to configure game:
 
-`java -jar tic-tac-toe-1.0-SNAPSHOT-jar-with-dependencies.jar <configuration_file_path>`
+`java -jar tic-tac-toe-1.0-jar-with-dependencies.jar <configuration_file_path>`
 
 `<configuration_file_path>` should be the path of a configuration file which is formatted like this:
 
