@@ -1,6 +1,7 @@
 package coskun.ahmet.model.gameboard;
 
-import coskun.ahmet.enums.GameNotification;
+import coskun.ahmet.enums.GameNotificationEnum;
+import coskun.ahmet.model.GameNotification;
 import coskun.ahmet.observer.GameMoveObserver;
 import coskun.ahmet.observer.ObserverManager;
 import coskun.ahmet.utils.PropertiesManager;
@@ -33,6 +34,7 @@ public class GameBoard extends GameMoveObserver implements IGameBoard {
                 GameBoardTile newTile = new GameBoardTile();
                 int positionOfNewTile = i * sizeOfGameBoardInt + j;
                 newTile.setPosition(positionOfNewTile);
+                newTile.setCurrentCharOnTile(PropertiesManager.getInstance().getGameProperty(PropertiesManager.EMPTY_TILE_CHAR_KEY).charAt(0));
 
                 //new tile has an left neighbour
                 if (j != 0) {
@@ -77,7 +79,7 @@ public class GameBoard extends GameMoveObserver implements IGameBoard {
         GameBoardTile oldGameBoardTile = gameBoardTileList.get(newGameBoardTile.getPosition());
 
         if (!isMoveValid(newGameBoardTile)) {
-            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), GameNotification.MOVE_IS_NOT_VALID);
+            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameNotification(GameNotificationEnum.MOVE_IS_NOT_VALID));
         } else {
 
             GameBoardTile rightTile = oldGameBoardTile.getRightTile();
@@ -120,22 +122,26 @@ public class GameBoard extends GameMoveObserver implements IGameBoard {
             if (leftLowerTile != null)
                 leftLowerTile.setRightUpperTile(newGameBoardTile);
 
-            System.out.println("Is Win: " + isWin(newGameBoardTile));
 
             gameBoardTileList.remove(newGameBoardTile.getPosition());
             gameBoardTileList.put(newGameBoardTile.getPosition(), newGameBoardTile);
 
-
             ObserverManager.getInstance().setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_VIEW_TOPIC_NAME_KEY), newGameBoardTile);
-            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), GameNotification.NEXT_PLAYER);
+
+            if (isWin(newGameBoardTile)) {
+                ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameNotification(GameNotificationEnum.GAME_END));
+            } else {
+                ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameNotification(GameNotificationEnum.NEXT_TURN));
+            }
+
         }
     }
 
-    public boolean isWin(GameBoardTile newGameBoardTile) {
+    private boolean isWin(GameBoardTile newGameBoardTile) {
         return isRowWin(newGameBoardTile) || isColWin(newGameBoardTile) || isDiagWin(newGameBoardTile);
     }
 
-    public boolean isRowWin(GameBoardTile newGameBoardTile) {
+    private boolean isRowWin(GameBoardTile newGameBoardTile) {
 
         int getYPosition = newGameBoardTile.getPosition() / sizeOfGameBoardInt;
 
@@ -156,12 +162,14 @@ public class GameBoard extends GameMoveObserver implements IGameBoard {
 
         return false;
     }
-    public boolean isColWin(GameBoardTile newGameBoardTile) {
 
+    private boolean isColWin(GameBoardTile newGameBoardTile) {
+        //TODO check col win
         return false;
     }
-    public boolean isDiagWin(GameBoardTile newGameBoardTile) {
 
+    private boolean isDiagWin(GameBoardTile newGameBoardTile) {
+        //TODO check diag win
         return false;
     }
 
@@ -169,7 +177,7 @@ public class GameBoard extends GameMoveObserver implements IGameBoard {
         if (newPlayedGameBoardTile == null)
             return false;
 
-        return gameBoardTileList.get(newPlayedGameBoardTile.getPosition()) == null;
+        return gameBoardTileList.get(newPlayedGameBoardTile.getPosition()).getCurrentCharOnTile() == PropertiesManager.getInstance().getGameProperty(PropertiesManager.EMPTY_TILE_CHAR_KEY).charAt(0);
     }
 
     public String getGameBoardStr() {
@@ -225,7 +233,7 @@ public class GameBoard extends GameMoveObserver implements IGameBoard {
         if (gameBoardTile != null)
             tileInf += gameBoardTile.getPositionOnMatrix(sizeOfGameBoardInt) + "-" + gameBoardTile.getCurrentCharOnTile() + "\t";
         else
-            tileInf += "~\t\t";
+            tileInf += "|\t\t";
 
         return tileInf;
     }
