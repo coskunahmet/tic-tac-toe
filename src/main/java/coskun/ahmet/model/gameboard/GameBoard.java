@@ -15,8 +15,10 @@ public class GameBoard extends GameMoveObserver implements IGameBoard {
     private int sizeOfGameBoardInt;
 
     private boolean isGameComplete;
+    private int numberOfFullTiles;
 
     public GameBoard() {
+        numberOfFullTiles = 0;
         sizeOfGameBoardInt = PropertiesManager.getInstance().getGameBoardSize();
         initGameBoard(sizeOfGameBoardInt);
 
@@ -125,16 +127,23 @@ public class GameBoard extends GameMoveObserver implements IGameBoard {
 
             gameBoardTileList.remove(newGameBoardTile.getPosition());
             gameBoardTileList.put(newGameBoardTile.getPosition(), newGameBoardTile);
+            numberOfFullTiles++;
 
             ObserverManager.getInstance().setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_VIEW_TOPIC_NAME_KEY), newGameBoardTile);
 
             if (isWin(newGameBoardTile)) {
                 ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameNotification(GameNotificationEnum.GAME_END));
+            } else if (!isAnyEmptyTile()) {
+                ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameNotification(GameNotificationEnum.GAME_END_WITHOUT_WINNER));
             } else {
                 ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameNotification(GameNotificationEnum.NEXT_TURN));
             }
 
         }
+    }
+
+    private boolean isAnyEmptyTile() {
+        return numberOfFullTiles < sizeOfGameBoardInt * sizeOfGameBoardInt;
     }
 
     private boolean isWin(GameBoardTile newGameBoardTile) {
