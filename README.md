@@ -15,12 +15,15 @@ General Tic-Tac-Toe game rules: [Tic-Tac-Toe Wikipedia Rules](https://en.wikiped
 - Maven 3 or above
 
 ## Versions
-### 1.0.0
-- Application first release
+### 1.0.2
+- Diagonal and column based win calculated
+- Related messages have been shown to user.
 ### 1.0.1
 Bugs are solved:
 - 0 in input after comma lead to an exception
 - Computer created position bigger than board size
+### 1.0.0
+- Application first release
 
 ## How to Run the game
 First, you must generate jar file with `maven:install` goal. After, you run this goal, it will generate a jar file with `-jar-with-dependencies` suffix in `target` folder.
@@ -64,3 +67,5 @@ second.player.character=S
 computer.player.character=C
 empty.tile.char=~
 ```
+
+## Design
