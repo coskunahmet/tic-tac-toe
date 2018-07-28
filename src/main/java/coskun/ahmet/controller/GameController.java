@@ -72,12 +72,17 @@ public class GameController extends Observer implements IGameController {
 
     public void update(GameNotification gameNotification) {
 
-        if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.NEXT_TURN)) {
-            updatePlayerTurn();
-        } else if (!(gameNotification instanceof GameViewNotification)
-                && gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END)) {
-            isGameFinished = true;
-            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.GAME_END, Arrays.asList(currentPlayer.getName())));
+        if (!(gameNotification instanceof GameViewNotification)) {
+            if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.NEXT_TURN)) {
+                updatePlayerTurn();
+            } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END)) {
+
+                isGameFinished = true;
+                ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.GAME_END, Arrays.asList(currentPlayer.getName())));
+            } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END_WITHOUT_WINNER)) {
+                isGameFinished = true;
+                ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.GAME_END_WITHOUT_WINNER, Collections.EMPTY_LIST));
+            }
         }
     }
 
