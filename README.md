@@ -1,5 +1,15 @@
 # tic-tac-toe
 This is a scalable, multiplayer tic tac toe game.
+
+In this game, Board size is scalable rather than 3*3. It can be between 3*3 to 10*10.
+Another feature of this tic tac toe game is multiplayer playing. There is two real player and one computer. All three player will play their character one by one. Their characters are also configurable.
+User inputs must be in format of `<integer_between_1_and_board_size>,<integer_between_1_and_board_size>`
+First integer is the x position of board tiles, Second integer is the y position of board files.
+For instance, if board size is 8*8;
+- right-lower corner can be played with 8,8 input value.
+- left-upper corner can be played with 1,1 input value.
+
+General Tic-Tac-Toe game rules: [Tic-Tac-Toe Wikipedia Rules](https://en.wikipedia.org/wiki/Tic-tac-toe)
 ## Requirements
 - JDK 1.8 or above
 - Maven 3 or above
