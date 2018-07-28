@@ -2,20 +2,18 @@ package coskun.ahmet.model;
 
 import coskun.ahmet.enums.GameNotificationEnum;
 
+import java.util.List;
+
 public class GameViewNotification extends GameNotification {
 
-    private String information;
+    private List<String> parameterList;
 
-    public GameViewNotification(GameNotificationEnum gameNotificationEnum, String information) {
+    public GameViewNotification(GameNotificationEnum gameNotificationEnum, List<String> parameterList) {
         super(gameNotificationEnum);
-        this.information = information;
+        this.parameterList = parameterList;
     }
 
-    public String getInformation() {
-        return information;
-    }
-
-    public void setInformation(String information) {
-        this.information = information;
+    public List<String> getParameterList() {
+        return parameterList;
     }
 }

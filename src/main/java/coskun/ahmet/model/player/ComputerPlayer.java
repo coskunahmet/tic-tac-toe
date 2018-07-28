@@ -25,7 +25,6 @@ public class ComputerPlayer extends Player {
 
     private int generatePositionToPlay() {
         Random generator = new Random();
-        System.out.println("generated. ");
         return generator.nextInt(PropertiesManager.getInstance().getGameBoardSize()) + 1;
     }
 }

@@ -36,6 +36,7 @@ public class GameView extends GameMoveObserver implements IGameView {
             }
         }
         System.out.println();
+        System.out.println();
     }
 
     public void update(int position, char newChar) {
@@ -47,12 +48,22 @@ public class GameView extends GameMoveObserver implements IGameView {
     public void update(GameNotification gameNotification) {
         if (gameNotification instanceof GameViewNotification) {
             if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.TURN_OF_PLAYER)) {
-                System.out.println(((GameViewNotification) gameNotification).getInformation() + "'s Turn.");
+                System.out.print(((GameViewNotification) gameNotification).getParameterList().get(0) + "'s Turn: ");
             } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.PLAYER_PLAYED)) {
-                System.out.println(((GameViewNotification) gameNotification).getInformation() + " played.");
+                System.out.println(((GameViewNotification) gameNotification).getParameterList().get(0)
+                        + " played to "
+                        + ((GameViewNotification) gameNotification).getParameterList().get(1)
+                        + ","
+                        + ((GameViewNotification) gameNotification).getParameterList().get(2));
+                System.out.println();
+                System.out.println("---------------------------");
             } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END)) {
-                System.out.println("Game END. Winner: " + ((GameViewNotification) gameNotification).getInformation());
+                System.out.println("Game END. Winner: " + ((GameViewNotification) gameNotification).getParameterList());
+            } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.INVALID_INPUT)) {
+                System.out.println("Invalid Input. Valid Input Pattern: <integer between 1 and " + PropertiesManager.getInstance().getGameBoardSize() + ">,<integer between 0 and " + PropertiesManager.getInstance().getGameBoardSize() + ">");
             }
+        } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.MOVE_IS_NOT_VALID)) {
+            System.out.println("Tile is full.");
         }
     }
 

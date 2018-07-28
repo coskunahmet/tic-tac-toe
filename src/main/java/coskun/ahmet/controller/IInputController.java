@@ -1,5 +1,7 @@
 package coskun.ahmet.controller;
 
+import coskun.ahmet.exception.InvalidInputException;
+
 public interface IInputController {
-    int[] getInput();
+    int[] getInput() throws InvalidInputException;
 }
