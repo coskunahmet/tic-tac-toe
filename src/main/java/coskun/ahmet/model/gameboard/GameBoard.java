@@ -1,22 +1,27 @@
 package coskun.ahmet.model.gameboard;
 
+import coskun.ahmet.enums.GameNotification;
+import coskun.ahmet.observer.GameMoveObserver;
+import coskun.ahmet.observer.ObserverManager;
 import coskun.ahmet.utils.PropertiesManager;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameBoard implements IGameBoard {
+public class GameBoard extends GameMoveObserver implements IGameBoard {
 
     private Map<Integer, GameBoardTile> gameBoardTileList;
     private int sizeOfGameBoardInt;
 
-    private static GameBoard instance = null;
-
     private boolean isGameComplete;
 
-    private GameBoard() {
+    public GameBoard() {
         sizeOfGameBoardInt = PropertiesManager.getInstance().getGameBoardSize();
         initGameBoard(sizeOfGameBoardInt);
+
+
+        ObserverManager.getInstance().attachGameMoveObserver(this, PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_MODEL_TOPIC_NAME_KEY));
+        ObserverManager.getInstance().attachObserver(this, PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY));
     }
 
     private void initGameBoard(int size) {
@@ -59,7 +64,11 @@ public class GameBoard implements IGameBoard {
 
     }
 
-    public void updateGameBoard(int position, char newChar) {
+    public void update(GameNotification gameNotification) {
+        //TODO notification update
+    }
+
+    public void update(int position, char newChar) {
 
         GameBoardTile newGameBoardTile = new GameBoardTile();
         newGameBoardTile.setPosition(position);
@@ -67,50 +76,59 @@ public class GameBoard implements IGameBoard {
 
         GameBoardTile oldGameBoardTile = gameBoardTileList.get(newGameBoardTile.getPosition());
 
-        GameBoardTile rightTile = oldGameBoardTile.getRightTile();
-        newGameBoardTile.setRightTile(rightTile);
-        if (rightTile != null)
-            rightTile.setLeftTile(newGameBoardTile);
+        if (!isMoveValid(newGameBoardTile)) {
+            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), GameNotification.MOVE_IS_NOT_VALID);
+        } else {
 
-        GameBoardTile leftTile = oldGameBoardTile.getLeftTile();
-        newGameBoardTile.setLeftTile(leftTile);
-        if (leftTile != null)
-            leftTile.setRightTile(newGameBoardTile);
+            GameBoardTile rightTile = oldGameBoardTile.getRightTile();
+            newGameBoardTile.setRightTile(rightTile);
+            if (rightTile != null)
+                rightTile.setLeftTile(newGameBoardTile);
 
-        GameBoardTile upperTile = oldGameBoardTile.getUpperTile();
-        newGameBoardTile.setUpperTile(upperTile);
-        if (upperTile != null)
-            upperTile.setLowerTile(newGameBoardTile);
+            GameBoardTile leftTile = oldGameBoardTile.getLeftTile();
+            newGameBoardTile.setLeftTile(leftTile);
+            if (leftTile != null)
+                leftTile.setRightTile(newGameBoardTile);
 
-        GameBoardTile lowerTile = oldGameBoardTile.getLowerTile();
-        newGameBoardTile.setLowerTile(lowerTile);
-        if (lowerTile != null)
-            lowerTile.setUpperTile(newGameBoardTile);
+            GameBoardTile upperTile = oldGameBoardTile.getUpperTile();
+            newGameBoardTile.setUpperTile(upperTile);
+            if (upperTile != null)
+                upperTile.setLowerTile(newGameBoardTile);
 
-        GameBoardTile rightUpperTile = oldGameBoardTile.getRightUpperTile();
-        newGameBoardTile.setRightUpperTile(rightUpperTile);
-        if (rightUpperTile != null)
-            rightUpperTile.setLeftLowerTile(newGameBoardTile);
+            GameBoardTile lowerTile = oldGameBoardTile.getLowerTile();
+            newGameBoardTile.setLowerTile(lowerTile);
+            if (lowerTile != null)
+                lowerTile.setUpperTile(newGameBoardTile);
 
-        GameBoardTile rightLowerTile = oldGameBoardTile.getRightLowerTile();
-        newGameBoardTile.setRightLowerTile(rightLowerTile);
-        if (rightLowerTile != null)
-            rightLowerTile.setLeftUpperTile(newGameBoardTile);
+            GameBoardTile rightUpperTile = oldGameBoardTile.getRightUpperTile();
+            newGameBoardTile.setRightUpperTile(rightUpperTile);
+            if (rightUpperTile != null)
+                rightUpperTile.setLeftLowerTile(newGameBoardTile);
 
-        GameBoardTile leftUpperTile = oldGameBoardTile.getLeftUpperTile();
-        newGameBoardTile.setLeftUpperTile(leftUpperTile);
-        if (leftUpperTile != null)
-            leftUpperTile.setRightLowerTile(newGameBoardTile);
+            GameBoardTile rightLowerTile = oldGameBoardTile.getRightLowerTile();
+            newGameBoardTile.setRightLowerTile(rightLowerTile);
+            if (rightLowerTile != null)
+                rightLowerTile.setLeftUpperTile(newGameBoardTile);
 
-        GameBoardTile leftLowerTile = oldGameBoardTile.getLeftLowerTile();
-        newGameBoardTile.setLeftLowerTile(leftLowerTile);
-        if (leftLowerTile != null)
-            leftLowerTile.setRightUpperTile(newGameBoardTile);
+            GameBoardTile leftUpperTile = oldGameBoardTile.getLeftUpperTile();
+            newGameBoardTile.setLeftUpperTile(leftUpperTile);
+            if (leftUpperTile != null)
+                leftUpperTile.setRightLowerTile(newGameBoardTile);
 
-        System.out.println("Is Win: " + isWin(newGameBoardTile));
+            GameBoardTile leftLowerTile = oldGameBoardTile.getLeftLowerTile();
+            newGameBoardTile.setLeftLowerTile(leftLowerTile);
+            if (leftLowerTile != null)
+                leftLowerTile.setRightUpperTile(newGameBoardTile);
 
-        gameBoardTileList.remove(newGameBoardTile.getPosition());
-        gameBoardTileList.put(newGameBoardTile.getPosition(), newGameBoardTile);
+            System.out.println("Is Win: " + isWin(newGameBoardTile));
+
+            gameBoardTileList.remove(newGameBoardTile.getPosition());
+            gameBoardTileList.put(newGameBoardTile.getPosition(), newGameBoardTile);
+
+
+            ObserverManager.getInstance().setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_VIEW_TOPIC_NAME_KEY), newGameBoardTile);
+            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), GameNotification.NEXT_PLAYER);
+        }
     }
 
     public boolean isWin(GameBoardTile newGameBoardTile) {
@@ -145,6 +163,13 @@ public class GameBoard implements IGameBoard {
     public boolean isDiagWin(GameBoardTile newGameBoardTile) {
 
         return false;
+    }
+
+    private boolean isMoveValid(GameBoardTile newPlayedGameBoardTile) {
+        if (newPlayedGameBoardTile == null)
+            return false;
+
+        return gameBoardTileList.get(newPlayedGameBoardTile.getPosition()) == null;
     }
 
     public String getGameBoardStr() {
@@ -205,14 +230,6 @@ public class GameBoard implements IGameBoard {
         return tileInf;
     }
 
-
-    public static GameBoard getInstance() {
-        if (instance == null) {
-            instance = new GameBoard();
-        }
-
-        return instance;
-    }
 
     public Map<Integer, GameBoardTile> getGameBoardTileList() {
         return gameBoardTileList;

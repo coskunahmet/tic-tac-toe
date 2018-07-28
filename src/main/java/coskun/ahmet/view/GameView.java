@@ -1,8 +1,11 @@
 package coskun.ahmet.view;
 
+import coskun.ahmet.enums.GameNotification;
+import coskun.ahmet.observer.GameMoveObserver;
+import coskun.ahmet.observer.ObserverManager;
 import coskun.ahmet.utils.PropertiesManager;
 
-public class GameView implements IGameView {
+public class GameView extends GameMoveObserver implements IGameView {
 
     private char[][] gameBoard;
     private int sizeOfGameBoardInt;
@@ -17,6 +20,9 @@ public class GameView implements IGameView {
                 gameBoard[i][j] = '~';
             }
         }
+
+        ObserverManager.getInstance().attachGameMoveObserver(this, PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_VIEW_TOPIC_NAME_KEY));
+        ObserverManager.getInstance().attachObserver(this, PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY));
     }
 
     public void showGameBoard() {
@@ -30,10 +36,14 @@ public class GameView implements IGameView {
         System.out.println();
     }
 
-    public void updateGameBoard(int position, char newChar) {
+    public void update(int position, char newChar) {
         gameBoard[position / sizeOfGameBoardInt][position % sizeOfGameBoardInt] = newChar;
 
         showGameBoard();
+    }
+
+    public void update(GameNotification gameNotification) {
+        //TODO show end message
     }
 
 }

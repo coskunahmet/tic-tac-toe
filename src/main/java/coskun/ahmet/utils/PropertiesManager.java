@@ -21,8 +21,9 @@ public class PropertiesManager {
     public final static String FIRST_PLAYER_CHAR_KEY = "first.player.character";
     public final static String SECOND_PLAYER_CHAR_KEY = "second.player.character";
     public final static String COMPUTER_PLAYER_CHAR_KEY = "computer.player.character";
-    public final static String MODEL_TOPIC_NAME_KEY = "model.topic.name";
-    public final static String VIEW_TOPIC_NAME_KEY = "view.topic.name";
+    public final static String GAME_MOVE_MODEL_TOPIC_NAME_KEY = "game.move.model.topic.name";
+    public final static String GAME_MOVE_VIEW_TOPIC_NAME_KEY = "game.move.view.topic.name";
+    public final static String GAME_NOTIFICATIONS_TOPIC_NAME_KEY = "game.notifications.topic.name";
 
     private Properties gameProperties;
 

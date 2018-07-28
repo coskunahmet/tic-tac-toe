@@ -15,7 +15,7 @@ public abstract class Player {
         this.symbol = symbol;
     }
 
-    public abstract void play();
+    public abstract int[] getInput();
 
     public int getxPositionToPlay() {
         return xPositionToPlay;

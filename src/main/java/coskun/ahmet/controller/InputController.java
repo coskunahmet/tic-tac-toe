@@ -4,14 +4,22 @@ import java.util.Scanner;
 
 public class InputController implements IInputController {
 
-    public String getInput() {
+
+    private static final String COORDINATE_DELIMITER = ",";
+
+    public int[] getInput() {
 
         Scanner in = new Scanner(System.in);
         String input = in.nextLine();
 
         checkInput();
 
-        return input;
+        String[] coordinatesStr = input.split(InputController.COORDINATE_DELIMITER);
+        int coordinates[] = new int[2];
+        coordinates[0] = Integer.parseInt(coordinatesStr[0]);
+        coordinates[1] = Integer.parseInt(coordinatesStr[1]);
+
+        return coordinates;
 
     }
 
