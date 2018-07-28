@@ -1,6 +1,8 @@
 package coskun.ahmet.controller;
 
-import coskun.ahmet.enums.GameNotification;
+import coskun.ahmet.enums.GameNotificationEnum;
+import coskun.ahmet.model.GameNotification;
+import coskun.ahmet.model.GameViewNotification;
 import coskun.ahmet.model.gameboard.GameBoardTile;
 import coskun.ahmet.model.player.ComputerPlayer;
 import coskun.ahmet.model.player.HumanPlayer;
@@ -17,41 +19,36 @@ public class GameController extends Observer implements IGameController {
 
     private List<Player> playerList = new ArrayList<Player>();
 
-    private Player currentPlayer;
+    private final String FIRST_HUMAN_PLAYER_NAME = "First Player";
+    private final String SECOND_HUMAN_PLAYER_NAME = "Second Player";
+    private final String COMPUTER_PLAYER_NAME = "Computer";
 
-    private boolean isGamePlay = false;
+    private Player currentPlayer;
+    private Player previousPlayer;
+
+    private boolean isGameFinished = false;
 
     private int turnNumber;
 
     private final int numberOfPlayer = 3;
 
-    public GameController() {
-
-
-    }
-
     public void init() {
-        //TODO initialize game
-
 
         initPlayersTurn();
-
         turnNumber = -1;
-
-        isGamePlay = true;
+        isGameFinished = false;
 
         ObserverManager.getInstance().attachObserver(this, PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY));
-
-        start();
     }
 
     public void start() {
 
         updatePlayerTurn();
 
-        while (isGamePlay) {
+        while (!isGameFinished) {
             beforePlay();
             update();
+            afterPlay();
         }
     }
 
@@ -66,18 +63,21 @@ public class GameController extends Observer implements IGameController {
         newGameBoardTile.setCurrentCharOnTile(playerList.get(turnNumber % numberOfPlayer).getSymbol());
 
         ObserverManager.getInstance().setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_MODEL_TOPIC_NAME_KEY), newGameBoardTile);
-
     }
 
     public void update(GameNotification gameNotification) {
 
-        if (gameNotification.equals(GameNotification.NEXT_PLAYER)) {
+        if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.NEXT_TURN)) {
             updatePlayerTurn();
+        } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END)) {
+            isGameFinished = true;
+            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.GAME_END, currentPlayer.getName()));
         }
     }
 
     private void updatePlayerTurn() {
         turnNumber++;
+        previousPlayer = currentPlayer;
         currentPlayer = playerList.get(turnNumber % numberOfPlayer);
     }
 
@@ -89,32 +89,31 @@ public class GameController extends Observer implements IGameController {
         char secondPlayerSymbol = PropertiesManager.getInstance().getGameProperty(PropertiesManager.SECOND_PLAYER_CHAR_KEY).charAt(0);
         char computerPlayerSymbol = PropertiesManager.getInstance().getGameProperty(PropertiesManager.COMPUTER_PLAYER_CHAR_KEY).charAt(0);
 
-
         switch (computerTurnNumber) {
             case 0:
-                playerList.add(new ComputerPlayer("Computer", computerPlayerSymbol));
-                playerList.add(new HumanPlayer("Ahmet", firstPlayerSymbol));
-                playerList.add(new HumanPlayer("Murat", secondPlayerSymbol));
+                playerList.add(new ComputerPlayer(COMPUTER_PLAYER_NAME, computerPlayerSymbol));
+                playerList.add(new HumanPlayer(FIRST_HUMAN_PLAYER_NAME, firstPlayerSymbol));
+                playerList.add(new HumanPlayer(SECOND_HUMAN_PLAYER_NAME, secondPlayerSymbol));
                 break;
             case 1:
-                playerList.add(new HumanPlayer("Ahmet", firstPlayerSymbol));
-                playerList.add(new ComputerPlayer("Computer", computerPlayerSymbol));
-                playerList.add(new HumanPlayer("Murat", secondPlayerSymbol));
+                playerList.add(new HumanPlayer(FIRST_HUMAN_PLAYER_NAME, firstPlayerSymbol));
+                playerList.add(new ComputerPlayer(COMPUTER_PLAYER_NAME, computerPlayerSymbol));
+                playerList.add(new HumanPlayer(SECOND_HUMAN_PLAYER_NAME, secondPlayerSymbol));
                 break;
             case 2:
-                playerList.add(new HumanPlayer("Ahmet", firstPlayerSymbol));
-                playerList.add(new HumanPlayer("Murat", secondPlayerSymbol));
-                playerList.add(new ComputerPlayer("Computer", computerPlayerSymbol));
+                playerList.add(new HumanPlayer(FIRST_HUMAN_PLAYER_NAME, firstPlayerSymbol));
+                playerList.add(new HumanPlayer(SECOND_HUMAN_PLAYER_NAME, secondPlayerSymbol));
+                playerList.add(new ComputerPlayer(COMPUTER_PLAYER_NAME, computerPlayerSymbol));
                 break;
 
         }
     }
 
-    private void beforePlay() {
-        System.out.println(currentPlayer.getName() + "'s Turn: ");
+    private void afterPlay() {
+        ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.PLAYER_PLAYED, previousPlayer.getName()));
     }
 
-    private void afterPlay() {
-        System.out.println(currentPlayer.getName() + " played.");
+    private void beforePlay() {
+        ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.TURN_OF_PLAYER, currentPlayer.getName()));
     }
 }

@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class InputController implements IInputController {
 
-
     private static final String COORDINATE_DELIMITER = ",";
 
     public int[] getInput() {

@@ -1,6 +1,6 @@
 package coskun.ahmet.observer;
 
-import coskun.ahmet.enums.GameNotification;
+import coskun.ahmet.model.GameNotification;
 import coskun.ahmet.model.gameboard.GameBoardTile;
 import coskun.ahmet.utils.PropertiesManager;
 

@@ -1,6 +1,8 @@
 package coskun.ahmet.view;
 
-import coskun.ahmet.enums.GameNotification;
+import coskun.ahmet.enums.GameNotificationEnum;
+import coskun.ahmet.model.GameNotification;
+import coskun.ahmet.model.GameViewNotification;
 import coskun.ahmet.observer.GameMoveObserver;
 import coskun.ahmet.observer.ObserverManager;
 import coskun.ahmet.utils.PropertiesManager;
@@ -17,7 +19,7 @@ public class GameView extends GameMoveObserver implements IGameView {
 
         for (int i = 0; i < sizeOfGameBoardInt; i++) {
             for (int j = 0; j < sizeOfGameBoardInt; j++) {
-                gameBoard[i][j] = '~';
+                gameBoard[i][j] = PropertiesManager.getInstance().getGameProperty(PropertiesManager.EMPTY_TILE_CHAR_KEY).charAt(0);
             }
         }
 
@@ -43,7 +45,15 @@ public class GameView extends GameMoveObserver implements IGameView {
     }
 
     public void update(GameNotification gameNotification) {
-        //TODO show end message
+        if (gameNotification instanceof GameViewNotification) {
+            if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.TURN_OF_PLAYER)) {
+                System.out.println(((GameViewNotification) gameNotification).getInformation() + "'s Turn.");
+            } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.PLAYER_PLAYED)) {
+                System.out.println(((GameViewNotification) gameNotification).getInformation() + " played.");
+            } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END)) {
+                System.out.println("Game END. Winner: " + ((GameViewNotification) gameNotification).getInformation());
+            }
+        }
     }
 
 }
