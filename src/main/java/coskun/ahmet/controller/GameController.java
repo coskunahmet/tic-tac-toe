@@ -1,6 +1,7 @@
 package coskun.ahmet.controller;
 
 import coskun.ahmet.enums.GameNotificationEnum;
+import coskun.ahmet.exception.InvalidInputException;
 import coskun.ahmet.model.GameNotification;
 import coskun.ahmet.model.GameViewNotification;
 import coskun.ahmet.model.gameboard.GameBoardTile;
@@ -25,11 +26,11 @@ public class GameController extends Observer implements IGameController {
 
     private Player currentPlayer;
     private Player previousPlayer;
+    private boolean isPlayerPlayed;
 
     private boolean isGameFinished = false;
 
     private int turnNumber;
-
     private final int numberOfPlayer = 3;
 
     public void init() {
@@ -37,6 +38,7 @@ public class GameController extends Observer implements IGameController {
         initPlayersTurn();
         turnNumber = -1;
         isGameFinished = false;
+        isPlayerPlayed = false;
 
         ObserverManager.getInstance().attachObserver(this, PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY));
     }
@@ -56,13 +58,18 @@ public class GameController extends Observer implements IGameController {
 
         GameBoardTile newGameBoardTile = null;
 
-        currentPlayer.getInput();
+        try {
+            currentPlayer.getInput();
 
-        newGameBoardTile = new GameBoardTile();
-        newGameBoardTile.setPosition(currentPlayer.getxPositionToPlay(), currentPlayer.getyPositionToPlay(), PropertiesManager.getInstance().getGameBoardSize());
-        newGameBoardTile.setCurrentCharOnTile(playerList.get(turnNumber % numberOfPlayer).getSymbol());
+            newGameBoardTile = new GameBoardTile();
+            newGameBoardTile.setPosition(currentPlayer.getxPositionToPlay(), currentPlayer.getyPositionToPlay(), PropertiesManager.getInstance().getGameBoardSize());
+            newGameBoardTile.setCurrentCharOnTile(playerList.get(turnNumber % numberOfPlayer).getSymbol());
 
-        ObserverManager.getInstance().setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_MODEL_TOPIC_NAME_KEY), newGameBoardTile);
+            ObserverManager.getInstance().setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_MODEL_TOPIC_NAME_KEY), newGameBoardTile);
+        } catch (InvalidInputException e) {
+            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.INVALID_INPUT, ""));
+        }
+
     }
 
     public void update(GameNotification gameNotification) {
@@ -79,6 +86,7 @@ public class GameController extends Observer implements IGameController {
         turnNumber++;
         previousPlayer = currentPlayer;
         currentPlayer = playerList.get(turnNumber % numberOfPlayer);
+        isPlayerPlayed = true;
     }
 
     private void initPlayersTurn() {
@@ -110,10 +118,12 @@ public class GameController extends Observer implements IGameController {
     }
 
     private void afterPlay() {
-        ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.PLAYER_PLAYED, previousPlayer.getName()));
+        if (isPlayerPlayed)
+            ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.PLAYER_PLAYED, previousPlayer.getName()));
     }
 
     private void beforePlay() {
+        isPlayerPlayed = false;
         ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.TURN_OF_PLAYER, currentPlayer.getName()));
     }
 }

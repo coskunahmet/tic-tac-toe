@@ -52,7 +52,11 @@ public class GameView extends GameMoveObserver implements IGameView {
                 System.out.println(((GameViewNotification) gameNotification).getInformation() + " played.");
             } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.GAME_END)) {
                 System.out.println("Game END. Winner: " + ((GameViewNotification) gameNotification).getInformation());
+            } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.INVALID_INPUT)) {
+                System.out.println("Invalid Input. Valid Input Pattern: <integer>,<integer>");
             }
+        } else if (gameNotification.getGameNotificationEnum().equals(GameNotificationEnum.MOVE_IS_NOT_VALID)) {
+            System.out.println("Tile is full.");
         }
     }
 

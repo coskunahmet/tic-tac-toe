@@ -2,6 +2,7 @@ package coskun.ahmet.model.player;
 
 import coskun.ahmet.controller.IInputController;
 import coskun.ahmet.controller.InputController;
+import coskun.ahmet.exception.InvalidInputException;
 
 public class HumanPlayer extends Player {
 
@@ -16,7 +17,7 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public int[] getInput() {
+    public int[] getInput() throws InvalidInputException {
 
         int[] coordinates = inputController.getInput();
         this.setxPositionToPlay(coordinates[0]);

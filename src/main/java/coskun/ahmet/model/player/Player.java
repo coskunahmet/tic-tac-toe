@@ -1,5 +1,7 @@
 package coskun.ahmet.model.player;
 
+import coskun.ahmet.exception.InvalidInputException;
+
 public abstract class Player {
 
     private String name;
@@ -15,7 +17,7 @@ public abstract class Player {
         this.symbol = symbol;
     }
 
-    public abstract int[] getInput();
+    public abstract int[] getInput() throws InvalidInputException;
 
     public int getxPositionToPlay() {
         return xPositionToPlay;
