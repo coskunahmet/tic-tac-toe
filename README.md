@@ -72,4 +72,5 @@ empty.tile.char=~
 
 ## Design
 
-I think visual explanation is easy to understand, So, I just put here a ![design diagram](Design%20Diagram.png)
+I think visual explanation is easy to understand, So, I just put here a design diagram
+![design diagram](Design%20Diagram.png)
