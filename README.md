@@ -15,6 +15,8 @@ General Tic-Tac-Toe game rules: [Tic-Tac-Toe Wikipedia Rules](https://en.wikiped
 - Maven 3 or above
 
 ## Versions
+### 1.0.3
+- Config File properties exceptions are handled gently.
 ### 1.0.2
 - Diagonal and column based win calculated
 - Related messages have been shown to user.
