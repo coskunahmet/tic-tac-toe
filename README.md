@@ -71,6 +71,5 @@ empty.tile.char=~
 ```
 
 ## Design
-
-I think visual explanation is easy to understand, So, I just put here a design diagram
+In this project, MVC and Observer Pattern has been applied. Visual explanation is always easy to understand, So, Here is a design diagram:
 ![design diagram](Design%20Diagram.png)
