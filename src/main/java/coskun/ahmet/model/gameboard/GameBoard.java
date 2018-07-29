@@ -73,7 +73,6 @@ public class GameBoard extends GameMoveObserver implements IGameBoard {
     }
 
     public void update(GameNotification gameNotification) {
-        //TODO notification update
     }
 
     public void update(int position, char newChar) {

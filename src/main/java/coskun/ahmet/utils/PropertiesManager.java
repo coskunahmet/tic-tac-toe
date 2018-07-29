@@ -7,9 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class PropertiesManager {
 
@@ -34,6 +32,8 @@ public class PropertiesManager {
     private static PropertiesManager instance = null;
 
     public static boolean DEFAULT_CONFIG = true;
+
+    public List<String> errorMessages = new ArrayList<>();
 
     private PropertiesManager() {
         gameProperties = new Properties();
@@ -87,12 +87,56 @@ public class PropertiesManager {
     }
 
     //To check if there is the same char for different player or computer
-    public boolean isPropertiesValid() throws NumberFormatException {
+    public boolean isPropertiesValid() {
 
-        if (!isThereSameCharForDifferentPlayer())
+        if (!isThereSameCharForDifferentPlayer()) {
+            errorMessages.add("Same Char For Different Player.");
+            return false;
+        } else if (!isSizeOfGameBoardValid()) {
+            errorMessages.add("Size of Board parameter in config file must be between 3 and 10.");
+            return false;
+        } else if (!isEveryPropertyIsFilled()) {
+            errorMessages.add("One of parameters in config file is missing or empty.");
+            return false;
+        } else if (!isPlayerCharPropertiesMoreThanOneChar()) {
+            errorMessages.add("Empty Tile Char or One of Player Characters in config file is more than one character");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isEveryPropertyIsFilled() {
+        if (this.gameProperties.getProperty(SIZE_OF_GAME_BOARD_KEY) == null
+                || this.gameProperties.getProperty(SIZE_OF_GAME_BOARD_KEY).equals(""))
+            return false;
+        if (this.gameProperties.getProperty(FIRST_PLAYER_CHAR_KEY) == null
+                || this.gameProperties.getProperty(FIRST_PLAYER_CHAR_KEY).equals(""))
+            return false;
+        if (this.gameProperties.getProperty(SECOND_PLAYER_CHAR_KEY) == null
+                || this.gameProperties.getProperty(SECOND_PLAYER_CHAR_KEY).equals(""))
+            return false;
+        if (this.gameProperties.getProperty(COMPUTER_PLAYER_CHAR_KEY) == null
+                || this.gameProperties.getProperty(COMPUTER_PLAYER_CHAR_KEY).equals(""))
+            return false;
+        if (this.gameProperties.getProperty(EMPTY_TILE_CHAR_KEY) == null
+                || this.gameProperties.getProperty(EMPTY_TILE_CHAR_KEY).equals(""))
             return false;
 
-        return isSizeOfGameBoardValid();
+        return true;
+    }
+
+    private boolean isPlayerCharPropertiesMoreThanOneChar() {
+        if (this.gameProperties.getProperty(FIRST_PLAYER_CHAR_KEY).length() > 1)
+            return false;
+        if (this.gameProperties.getProperty(SECOND_PLAYER_CHAR_KEY).length() > 1)
+            return false;
+        if (this.gameProperties.getProperty(COMPUTER_PLAYER_CHAR_KEY).length() > 1)
+            return false;
+        if (this.gameProperties.getProperty(EMPTY_TILE_CHAR_KEY).length() > 1)
+            return false;
+
+        return true;
     }
 
     private boolean isThereSameCharForDifferentPlayer() {
@@ -110,12 +154,17 @@ public class PropertiesManager {
     }
 
     //size of gameboard should be between 3x3 and 10x10
-    private boolean isSizeOfGameBoardValid() throws NumberFormatException {
+    private boolean isSizeOfGameBoardValid() {
         String sizeOfGameBoardStr = this.gameProperties.getProperty(SIZE_OF_GAME_BOARD_KEY);
 
-        int sizeOfGameBoardInt = Integer.parseInt(sizeOfGameBoardStr);
+        try {
+            int sizeOfGameBoardInt = Integer.parseInt(sizeOfGameBoardStr);
+            return sizeOfGameBoardInt >= 3 && sizeOfGameBoardInt <= 10;
 
-        return sizeOfGameBoardInt >= 3 && sizeOfGameBoardInt <= 10;
+        } catch (NumberFormatException ex) {
+            errorMessages.add("Size of Board parameter in config file must be integer.");
+            return false;
+        }
     }
 
     public int getGameBoardSize() {

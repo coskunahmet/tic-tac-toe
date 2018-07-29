@@ -54,16 +54,16 @@ public class GameController extends Observer implements IGameController {
 
     public void update() {
 
-        GameBoardTile newGameBoardTile = null;
+        GameBoardTile newGameBoardTileEvent = null;
 
         try {
             currentPlayer.getInput();
 
-            newGameBoardTile = new GameBoardTile();
-            newGameBoardTile.setPosition(currentPlayer.getxPositionToPlay(), currentPlayer.getyPositionToPlay(), PropertiesManager.getInstance().getGameBoardSize());
-            newGameBoardTile.setCurrentCharOnTile(playerList.get(turnNumber % numberOfPlayer).getSymbol());
+            newGameBoardTileEvent = new GameBoardTile();
+            newGameBoardTileEvent.setPosition(currentPlayer.getxPositionToPlay(), currentPlayer.getyPositionToPlay(), PropertiesManager.getInstance().getGameBoardSize());
+            newGameBoardTileEvent.setCurrentCharOnTile(playerList.get(turnNumber % numberOfPlayer).getSymbol());
 
-            ObserverManager.getInstance().setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_MODEL_TOPIC_NAME_KEY), newGameBoardTile);
+            ObserverManager.getInstance().setGameBoardTile(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_MOVE_MODEL_TOPIC_NAME_KEY), newGameBoardTileEvent);
         } catch (InvalidInputException | NoSuchElementException e) {
             ObserverManager.getInstance().setGameNotification(PropertiesManager.getInstance().getTopicProperty(PropertiesManager.GAME_NOTIFICATIONS_TOPIC_NAME_KEY), new GameViewNotification(GameNotificationEnum.INVALID_INPUT, new ArrayList<>()));
         }

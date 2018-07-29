@@ -28,7 +28,10 @@ public class GameRunner {
         PropertiesManager propertiesManagerInstance = PropertiesManager.getInstance();
 
         if (!propertiesManagerInstance.isPropertiesValid()) {
-            //TODO put a message on console
+            for (String error :
+                    propertiesManagerInstance.errorMessages) {
+                System.out.println(error);
+            }
             return;
         }
 
